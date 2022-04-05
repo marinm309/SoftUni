@@ -1,0 +1,26 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<form action="" method="POST">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit">
+</form>
+
+
+<h1>MY POSTS</h1>
+<hr>
+
+{% for post in posts %}
+
+{{post.user}}
+{{post.title}}
+{{post.description}}
+<a href="{% url 'edit-post' post.id %}">Edit</a>
+<a href="{% url 'delete-post' post.id %}">Delete</a>
+<p>Likes: {{post.like}}</p>
+
+{% endfor %}
+
+{% endblock content %}

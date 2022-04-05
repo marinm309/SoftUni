@@ -1,0 +1,16 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+{% for post in posts %}
+
+{{post.user}}
+{{post.title}}
+{{post.description}}
+<p><a href="{% url 'like-post' post.id %}">Likes</a>: {{post.like}}</p>
+
+<br>
+
+{% endfor %}
+
+{% endblock content %}
