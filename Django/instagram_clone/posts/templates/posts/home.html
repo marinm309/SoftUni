@@ -9,6 +9,23 @@
 {{post.description}}
 <p><a href="{% url 'like-post' post.id %}">Likes</a>: {{post.like}}</p>
 
+
+<h3>Comments:</h3>
+{%for comment in comments%}
+
+{% if comment.post == post %}
+<h4>{{comment.user}}: {{comment.description}}</h4>
+{% endif %}
+
+{% endfor %}
+
+
+<form action="{% url 'create-comment' post.id %}" method="POST">
+    {% csrf_token %}
+    <input type="text" name="comment">
+    <input type="submit">
+</form>
+
 <br>
 
 {% endfor %}

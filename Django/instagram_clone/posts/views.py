@@ -1,13 +1,14 @@
 from turtle import pos
 from django.shortcuts import redirect, render
 from pkg_resources import ResolutionError
-from .forms import PostForm
-from.models import Post, Likes
+from .forms import PostForm, CommentForm
+from.models import Post, Likes, Comments
 from django.contrib.auth.decorators import login_required
 
 def home(request):
     posts = Post.objects.all()
-    context = {'posts': posts}
+    comments = Comments.objects.all()
+    context = {'posts': posts, 'comments': comments}
     return render(request, 'posts/home.html', context)
 
 
@@ -42,9 +43,26 @@ def edit_post(request, pk):
     return render(request, 'posts/create_post.html', context)
 
 def like_post(request, pk):
-    post = Post.objects.get(id=pk)
     user = request.user.profile
-    like = Likes.post
-    print(like)
-    
+    post = Post.objects.get(id=pk)
+    like = Likes.objects.filter(user=user, post=post)
+    if len(like) == 0:
+        like = Likes.objects.create(user=user, post=post)
+        post.like += 1
+        post.save()
+    else:
+        like = Likes.objects.get(user=user, post=post)
+        like.delete()
+        post.like -= 1
+        post.save()
+
+    return redirect('home')
+
+def create_comment(request, pk):
+    user = request.user.profile
+    post = Post.objects.get(id=pk)
+    description = request.POST['comment']
+    comment = Comments.objects.create(user=user, post=post, description=description)
+    comment.save()
+
     return redirect('home')
