@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from .forms import ProfileForm
 from django.contrib.auth.decorators import login_required
 from posts.models import Post
+from .models import *
 
 
 def user_register(request):
@@ -52,3 +53,26 @@ def profile(request):
 def user_logout(request):
     logout(request)
     return redirect('home')
+
+def search_results(request):
+    user = request.user.profile
+    profile = Profile.objects.get(id=user.id)
+    user_followers = UserFollowers.objects.filter(user=profile)
+    if request.method == 'POST':
+        key_word = request.POST['search']
+        profiles = Profile.objects.filter(username__contains=key_word)
+        if len(profiles) != 0:
+            match = True
+
+    context = {'profiles': profiles, 'user': user, 'match': match, 'followers': user_followers}
+    return render(request, 'users/search_result.html', context)
+
+
+def follow(request, pk):
+    user = request.user.profile
+    to_follow = Profile.objects.get(id=pk)
+    profile = Profile.objects.get(id=user.id)
+    possible = UserFollowers.objects.filter(user=to_follow, follower=profile.user)
+    if len(possible) == 0:
+        UserFollowers.objects.create(user=to_follow, follower=profile.user)
+    return render(request, 'users/search_result.html')

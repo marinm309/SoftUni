@@ -1,0 +1,26 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+{% if match %}
+{% for profile in profiles %}
+
+
+{{profile}}
+
+<a href="">View Profile</a>
+
+{% if profile != user %}
+<a href="{% url 'follow' profile.id %}">Add</a>
+{% endif %}
+<br>
+
+{% endfor %}
+
+{% else %}
+
+<h1>No Matches</h1>
+
+{% endif %}
+
+{% endblock content %}
