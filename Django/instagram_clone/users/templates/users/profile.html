@@ -2,14 +2,11 @@
 
 {% block content %}
 
-<form action="" method="POST">
-    {% csrf_token %}
-    {{form.as_p}}
-    <input type="submit">
-</form>
 
-
-<h1>MY POSTS</h1>
+<h1>{{profile.username}}'s POSTS</h1>
+{% if user == profile %}
+<a href="{% url 'edit-profile' user.id %}">Edit Profile</a>
+{% endif %}
 <hr>
 
 {% for post in posts %}
@@ -17,10 +14,16 @@
 {{post.user}}
 {{post.title}}
 {{post.description}}
+
+{% if user.user == profile.user %}
 <a href="{% url 'edit-post' post.id %}">Edit</a>
 <a href="{% url 'delete-post' post.id %}">Delete</a>
+{% endif %}
+
 <p>Likes: {{post.like}}</p>
 
 {% endfor %}
+
+<a href="{% url 'home' %}">Go back</a>
 
 {% endblock content %}

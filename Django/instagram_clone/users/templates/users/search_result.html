@@ -8,10 +8,16 @@
 
 {{profile}}
 
-<a href="">View Profile</a>
+<a href="{% url 'profile' profile.username %}">View Profile</a>
 
-{% if profile != user %}
-<a href="{% url 'follow' profile.id %}">Add</a>
+{% if profile != user and profile not in lst %}
+
+    <a href="{% url 'follow' profile.id %}">Follow</a>
+
+{% elif profile != user and profile in lst %}
+
+    <a href="{% url 'unfollow' profile.id %}">Unfollow</a>
+
 {% endif %}
 <br>
 

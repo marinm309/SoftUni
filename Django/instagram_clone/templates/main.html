@@ -18,7 +18,7 @@ Search
 
 {% if user.username != '' %}
 <a href="{% url 'create-post' %}">Make a post</a>
-<a href="{% url 'profile' %}">Profile</a>
+<a href="{% url 'profile' user.username %}">Profile</a>
 <a href="{% url 'logout' %}">Log out</a>
 {% endif %}
 <hr>

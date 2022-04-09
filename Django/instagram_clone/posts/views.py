@@ -4,11 +4,18 @@ from pkg_resources import ResolutionError
 from .forms import PostForm, CommentForm
 from.models import Post, Likes, Comments
 from django.contrib.auth.decorators import login_required
+from users.models import UserFollowers
 
 def home(request):
+    user = request.user.profile
+    following = UserFollowers.objects.filter(follower=user.user)
+    lst = []
+    for i in following:
+        lst.append(i.user)
     posts = Post.objects.all()
+    posts = Post.objects.order_by('-created')
     comments = Comments.objects.all()
-    context = {'posts': posts, 'comments': comments}
+    context = {'posts': posts, 'comments': comments, 'following': following, 'lst': lst, 'user': user}
     return render(request, 'posts/home.html', context)
 
 

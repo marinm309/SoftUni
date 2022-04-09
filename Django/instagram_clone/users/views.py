@@ -34,21 +34,27 @@ def user_login(request):
     context = {}
     return render(request, 'users/login.html', context)
 
-@login_required(login_url='login')
-def profile(request):
-    form = ProfileForm()
-    user_in = request.user.profile
-    posts = Post.objects.filter(user=user_in)
-    if request.method == 'POST':
-        form = ProfileForm(request.POST)
-        if form.is_valid:
-            profile = form.save(commit=False)
-            print(profile.user)
-            profile.user = user_in
-            profile.save()
-            return redirect('profile')
-    context = {'form': form, 'posts': posts}
+
+def profile(request, pk):
+    user = request.user.profile
+    profile = Profile.objects.get(username=pk)
+    posts = Post.objects.filter(user=profile)
+    
+    context = {'posts': posts, 'user': user, 'profile': profile}
     return render(request, 'users/profile.html', context)
+
+def edit_profile(request, pk):
+    user = request.user.profile
+    profile = Profile.objects.get(id=pk)
+    form = ProfileForm(instance=profile)
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=profile)
+        if form.is_valid:
+            form.save()
+            return redirect(f'/profile/{user.user}/')
+
+    context = {'form': form, 'user': user}
+    return render(request, 'users/edit_profile.html', context)
 
 def user_logout(request):
     logout(request)
@@ -57,14 +63,29 @@ def user_logout(request):
 def search_results(request):
     user = request.user.profile
     profile = Profile.objects.get(id=user.id)
-    user_followers = UserFollowers.objects.filter(user=profile)
+    user_followers = UserFollowers.objects.filter(follower=profile.user)
+    lst = []
+    key_word = ''
+    for i in user_followers:
+        lst.append(i.user)
     if request.method == 'POST':
-        key_word = request.POST['search']
+        if len(request.POST) != 0:
+            key_word = request.POST['search']
+            profiles = Profile.objects.filter(username__contains=key_word)
+            if len(profiles) != 0:
+                match = True
+        else:
+            key_word = ''
+            profiles = Profile.objects.filter(username__contains=key_word)
+            if len(profiles) != 0:
+                match = True
+    else:
+        print(key_word)
         profiles = Profile.objects.filter(username__contains=key_word)
         if len(profiles) != 0:
             match = True
 
-    context = {'profiles': profiles, 'user': user, 'match': match, 'followers': user_followers}
+    context = {'profiles': profiles, 'user': user, 'match': match, 'followers': user_followers, 'lst': lst}
     return render(request, 'users/search_result.html', context)
 
 
@@ -75,4 +96,14 @@ def follow(request, pk):
     possible = UserFollowers.objects.filter(user=to_follow, follower=profile.user)
     if len(possible) == 0:
         UserFollowers.objects.create(user=to_follow, follower=profile.user)
-    return render(request, 'users/search_result.html')
+    return redirect(request.META['HTTP_REFERER'])
+
+def unfollow(request, pk):
+    user = request.user.profile
+    to_unfollow = Profile.objects.get(id=pk)
+    profile = Profile.objects.get(id=user.id)
+    possible = UserFollowers.objects.filter(user=to_unfollow, follower=profile.user)
+    if len(possible) != 0:
+        form = UserFollowers.objects.get(user=to_unfollow, follower=profile.user)
+        form.delete()
+    return redirect(request.META['HTTP_REFERER'])
