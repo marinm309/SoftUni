@@ -2,6 +2,9 @@
 
 {% block content %}
 
+<h1>{{profile.user}}'s FOLLOWERS</h1>
+<hr>
+
 {% for follower in followers %}
 
 {{follower.follower}}
@@ -18,5 +21,7 @@
 {% endif %}
 <br>
 {% endfor %}
+
+<a href="{% url 'profile' profile.user.username %}">Go back</a>
 
 {% endblock content %}

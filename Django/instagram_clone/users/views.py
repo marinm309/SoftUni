@@ -119,6 +119,17 @@ def view_followers(request, pk):
     following_lst = []
     for i in following:
         following_lst.append(i.user.username)
-    print(following_lst)
     context = {'followers': followers, 'following_lst': following_lst, 'user': user, 'profile': profile}
     return render(request, 'users/view_followers.html', context)
+
+
+def view_following(request, pk):
+    user = request.user.profile
+    profile = Profile.objects.get(id=pk)
+    followers = UserFollowers.objects.filter(follower=user.user)
+    following = UserFollowers.objects.filter(follower=profile.user)
+    following_lst = []
+    for i in followers:
+        following_lst.append(i.user.username)
+    context = {'user': user, 'profile': profile, 'following_lst': following_lst, 'following': following}
+    return render(request, 'users/view_following.html', context)

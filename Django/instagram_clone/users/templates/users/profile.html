@@ -8,7 +8,7 @@
 <a href="{% url 'edit-profile' user.id %}">Edit Profile</a>
 {% endif %}
 <a href="{% url 'followers' profile.id %}">Followers</a>
-<a href="">Following</a>
+<a href="{% url 'following' profile.id %}">Following</a>
 <hr>
 
 {% for post in posts %}
