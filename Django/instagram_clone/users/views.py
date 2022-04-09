@@ -74,6 +74,8 @@ def search_results(request):
             profiles = Profile.objects.filter(username__contains=key_word)
             if len(profiles) != 0:
                 match = True
+            else:
+                match = False
         else:
             key_word = ''
             profiles = Profile.objects.filter(username__contains=key_word)
@@ -107,3 +109,16 @@ def unfollow(request, pk):
         form = UserFollowers.objects.get(user=to_unfollow, follower=profile.user)
         form.delete()
     return redirect(request.META['HTTP_REFERER'])
+
+
+def view_followers(request, pk):
+    user = request.user.profile
+    profile = Profile.objects.get(id=pk)
+    followers = UserFollowers.objects.filter(user=profile)
+    following = UserFollowers.objects.filter(follower=profile.user)
+    following_lst = []
+    for i in following:
+        following_lst.append(i.user.username)
+    print(following_lst)
+    context = {'followers': followers, 'following_lst': following_lst, 'user': user, 'profile': profile}
+    return render(request, 'users/view_followers.html', context)

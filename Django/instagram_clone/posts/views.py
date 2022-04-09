@@ -6,6 +6,7 @@ from.models import Post, Likes, Comments
 from django.contrib.auth.decorators import login_required
 from users.models import UserFollowers
 
+@login_required(login_url='login')
 def home(request):
     user = request.user.profile
     following = UserFollowers.objects.filter(follower=user.user)
@@ -34,18 +35,20 @@ def create_post(request):
     return render(request, 'posts/create_post.html', context)
 
 def delete_post(request, pk):
+    user = request.user.profile
     post = Post.objects.get(id=pk)
     post.delete()
-    return redirect('profile')
+    return redirect(f'/profile/{user.user}')
 
 def edit_post(request, pk):
+    user = request.user.profile
     post = Post.objects.get(id=pk)
     form = PostForm(instance=post)
     if request.method == 'POST':
         form = PostForm(request.POST, instance=post)
         if form.is_valid:
             form.save()
-            return redirect('profile')
+            return redirect(f'/profile/{user.user}')
     context = {'form': form}
     return render(request, 'posts/create_post.html', context)
 

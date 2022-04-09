@@ -1,0 +1,22 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+{% for follower in followers %}
+
+{{follower.follower}}
+<a href="{% url 'profile' follower.follower %}">View Profile</a>
+
+{% if follower.follower.profile.username in following_lst and user.user == profile.user %}
+
+<a href="{% url 'unfollow' follower.follower.profile.id %}">Unfollow</a>
+
+{% elif follower.follower.profile.username not in following_lst and user.user == profile.user %}
+
+<a href="{% url 'follow' follower.follower.profile.id %}">Follow</a>
+
+{% endif %}
+<br>
+{% endfor %}
+
+{% endblock content %}
