@@ -9,6 +9,7 @@ class Post(models.Model):
     title = models.CharField(max_length=100, null=True, blank=True)
     description = models.TextField(blank=True, null=True)
     like = models.IntegerField(default=0, null=True)
+    num_of_comments = models.IntegerField(default=0, null=True)
 
     def __str__(self) -> str:
         return str(self.title)

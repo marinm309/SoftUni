@@ -2,30 +2,59 @@
 
 {% block content %}
 
+{% load static %}
 
-<h1>{{profile.username}}'s POSTS</h1>
-{% if user == profile %}
-<a href="{% url 'edit-profile' user.id %}">Edit Profile</a>
-{% endif %}
-<a href="{% url 'followers' profile.id %}">Followers</a>
-<a href="{% url 'following' profile.id %}">Following</a>
-<hr>
-
-{% for post in posts %}
-
-{{post.user}}
-{{post.title}}
-{{post.description}}
-
-{% if user.user == profile.user %}
-<a href="{% url 'edit-post' post.id %}">Edit</a>
-<a href="{% url 'delete-post' post.id %}">Delete</a>
-{% endif %}
-
-<p>Likes: {{post.like}}</p>
-
-{% endfor %}
-
-<a href="{% url 'home' %}">Go back</a>
+<div class="profile-wrapper">
+    <div class="profile-wrapper-editor">
+        <section class="user-details">
+            <div class="user-img-large">
+                <img src="{% static 'images/default.png' %}" alt="">
+                {% if profile.user.profile in lst %}
+                <div class="profile-follow"><a style="color: rgb(245, 56, 56);" href="{% url 'unfollow' profile.id %}">Unfollow</a></div>
+                {% elif profile.user not in lst and profile.user.profile != user %}
+                <div class="profile-follow"><a href="{% url 'follow' profile.id %}">Follow</a></div>
+                {% elif profile.user.profile == user %}
+                <div class="profile-follow"><a href="{% url 'logout' %}" style="color: rgb(245, 56, 56);">Logout</a></div>
+                {% endif %}
+            </div>
+            <div class="about">
+                <div><h3>{{profile.user}}</h3></div>
+                <div class="stats-info">
+                    <ul>
+                        <li><span>{{total_posts}}</span> posts</li>
+                        <li><a href="{% url 'followers' user.id %}"><span>{{total_followers}}</span> followers</a></li>
+                        <li><a href="{% url 'following' user.id %}"><span>{{total_following}}</span> following</a></li>
+                    </ul>
+                </div>
+                <div class="user-info">
+                    {% if profile.first_name is None %}
+                    <div class="user-name"><h1></h1></div>
+                    {% else %}
+                    <div class="user-name"><h1>{{profile.first_name}} {{profile_lastname}}</h1></div>
+                    {% endif %}
+                    <div class="user-description">
+                        {% if profile.email is not None %}
+                        <p>{{profile.email}}</p>
+                        {% endif %}
+                        {% if profile.address is not None %}
+                        <p>{{profile.address}}</p>
+                        {% endif %}
+                        {% if profile.bio is not None %}
+                        <p>{{profile.bio}}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </section>
+        <hr id="random-hr">
+        <section class="user-posts">
+            {% for post in posts %}
+            <div class="single-post">
+                <a href="{% url 'single-post' post.id %}"><img src="{% static 'images/default.png' %}" alt=""></a>
+            </div>
+            {% endfor %}
+        </section>
+    </div>
+</div>
 
 {% endblock content %}

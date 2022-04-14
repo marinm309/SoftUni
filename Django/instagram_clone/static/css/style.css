@@ -1,0 +1,481 @@
+body{
+    margin: 0;
+    background-color: #eee;
+    font-family: 'Roboto', sans-serif;
+    color: black;
+}
+
+li{
+    list-style-type: none;
+    font-size: 30px;
+}
+
+a{
+    text-decoration: none;
+    color: black;
+}
+
+nav{
+    background-color: white;
+    top: 0;
+    width: 100%;
+    height: auto;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    -webkit-box-shadow: 0px 5px 15px 0px rgba(0,0,0,0.6); 
+    box-shadow: 0px 5px 15px 0px rgba(0,0,0,0.6);
+}
+
+nav form{
+    width: 300px;
+}
+
+.just-for-space{
+    margin-bottom: 5%;
+}
+
+.nav-profile{
+    width: 30px;
+    border-radius: 50%;
+}
+
+.nav-search{
+    display: flex;
+}
+
+.nav-search input{
+    border: none;
+    border-radius: 10px;
+    height: 30px;
+    width: 100%;
+    background-color: rgb(230, 230, 230);
+}
+
+.nav-search input[type=text]{
+    padding: 0 40px;
+    position: relative;
+}
+
+.nav-search input::placeholder{
+    font-size: 16;
+    position: absolute;
+    left: 45px;
+    top: 10px;
+    color: rgb(150, 150, 150);
+}
+
+.nav-search i{
+    color: rgb(150, 150, 150);
+    font-size: 20px;
+    position: relative;
+    z-index: 2;
+    left: 35px;
+    top: 5px;
+}
+
+.nav-elements{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding-left: 20%;
+    padding-right: 20%;
+}
+
+.main-nav{
+    display: flex;
+    align-items: center;
+}
+
+.main-nav li{
+    padding: 0 10px;
+}
+
+.post-wrapper{
+    border: none;
+    background-color: white;
+    width: 600px;
+    height: 910px;
+    margin: 50px auto;
+    border: 1px solid rgb(170, 170, 170);
+    -webkit-box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.3); 
+    box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.3);
+    min-width: 300px;
+}
+
+.post-top{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 40%;
+}
+
+.user-img img{
+    border-radius: 50%;
+    width: 30px;
+    padding-left: 20px;
+}
+
+.user-follow a{
+    color: rgb(80, 80, 241);
+}
+
+.post-img img{
+    width: 100%;
+    height: 600px;
+    object-fit: cover;
+    background-color: #eee;
+}
+
+.post-like{
+    padding: 0 20px;
+}
+
+.post-description{
+    display: flex;
+    align-items: center;
+    height: 20px;
+    padding: 0 20px;
+}
+
+.post-description span{
+    padding-right: 5px;
+}
+
+.view-comments a{
+    color: rgb(170, 170, 170);
+    padding: 0 20px;
+}
+
+.time-ago h6{
+    color: rgb(170, 170, 170);
+    padding: 0 20px;
+}
+
+.add-comments{
+    border-top: 1px solid rgb(170, 170, 170);
+}
+
+.add-comments input{
+    border: none;
+    background-color: white;
+    padding: 0 20px;
+}
+
+.add-comments input:focus{
+    outline: none;
+}
+
+.add-comments form{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 40px;
+    width: 100%;
+}
+
+.type-comments{
+    width: 600px;
+}
+
+.post-comments{
+    position: relative;
+}
+
+.post-comments input[type=submit]{
+    color: rgb(80, 80, 241);
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 700px){
+    .post-wrapper{
+        width: 90%;
+    }
+}
+
+.profile-wrapper{
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+}
+
+.user-details{
+    display: grid;
+    grid-template-areas: 'image about';
+    width: 100%;
+    margin: 30px auto;
+}
+
+.user-img-large{
+    grid-area: image;
+    display: grid;
+    width: 200px;
+}
+
+.user-img-large img{
+    border-radius: 50%;
+    width: 200px;
+}
+
+.profile-follow{
+    display: flex;
+    justify-content: center;
+}
+
+.profile-follow a{
+    color: rgb(80, 80, 241);
+}
+
+.about{
+    grid-area: about;
+}
+
+.stats-info ul{
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+}
+
+.stats-info li{
+    font-size: 15px;
+    padding: 0;
+}
+
+.stats-info li span{
+    font-weight: bold;
+}
+
+#random-hr{
+    width: 100%;
+}
+
+.user-posts{
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.single-post{
+    width: auto;
+    flex: 0 0 32%;
+    margin: 1% 0;
+}
+
+.single-post img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-wrapper-editor{
+    width: 100%;
+    padding-left: 20%;
+    padding-right: 20%;
+}
+
+.login-png{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.login-elements{
+    width: 30%;
+    margin-top: 10%;
+}
+
+.login-wrapper{
+    background-color: white;
+    border: 1px solid rgb(170, 168, 168);
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    -webkit-box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.2); 
+    box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.2);
+}
+
+.login-wrapper form input{
+    display: block;
+    width: 50%;
+    border-radius: 5px;
+    margin: 30px auto;
+    height: 40px;
+    background-color: #eee;
+    border: 1px solid rgb(170, 168, 168);
+    padding: 0 15px;
+    
+}
+
+#login-btn{
+    background-color: rgb(10, 224, 224);
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    transition-duration: 0.3s;
+    text-align: center;
+    width: calc(50% + 30px);
+}
+
+#login-btn:hover{
+    background-color: rgb(5, 145, 145);
+}
+
+.register-link{
+    border: 1px solid rgb(170, 168, 168);
+    margin-top: 30px;
+    background-color: white;
+    text-align: center;
+    font-weight: bold;
+    -webkit-box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.2); 
+    box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.2);
+}
+
+#signup-btn{
+    color: rgb(80, 80, 241);
+}
+
+@media only screen and (max-width: 1400px){
+    .login-elements{
+        width: 60%;
+    }
+}
+
+@media only screen and (max-width: 1000px){
+    .login-elements{
+        width: 80%;
+    }
+}
+
+.single-post-wrapper{
+    margin: 50px auto;
+    width: 50%;
+    height: 80%;
+    display: flex;
+    -webkit-box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.3); 
+    box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.3);
+}
+
+.comments-wrapper{
+    width: 50%;
+    border: 1px solid rgb(170, 170, 170);
+    background-color: white;
+    overflow: auto;
+    padding-top: 60px;
+}
+
+.comment-wrapper{
+    padding: 0 30px;
+    margin: 25px 0;
+}
+
+.single{
+    margin: 0;
+    padding: 0;
+    -webkit-box-shadow: none; 
+    box-shadow: none;
+}
+
+.single-post-time{
+    padding-bottom: 30px;
+}
+
+.single-post-comment{
+    display: flex;
+    align-items: center;
+    margin-left: 60px;
+}
+
+.single-post-comment h5{
+    margin: 0 15px;
+    width: 40%;
+    overflow: hidden;
+    white-space: pre-wrap;
+    text-overflow: ellipsis;
+    max-height: 100px;
+}
+
+.single-top{
+    height: 30px;
+    justify-content: left;
+    margin-bottom: 5px;
+}
+
+@media only screen and (max-width: 1800px){
+    .single-post-wrapper{
+        width: 80%;
+    }
+
+    .single{
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 1500px){
+    .single-post-wrapper{
+        display: grid;
+        width: 50%;
+    }
+    
+    .single{
+        width: 100%;
+    }
+
+    .comments-wrapper{
+        width: 100%;
+    }
+    
+}
+
+@media only screen and (max-width: 1000px){
+    .single-post-wrapper{
+        width: 95%;
+    }
+}
+
+.follow-wrapper{
+    width: 40%;
+    height: 60vh;
+    overflow: auto;
+    margin: 0 auto;
+    background-color: white;
+    margin-top: 10%;
+    padding: 30px 30px;
+    border: 1px solid rgb(170, 170, 170);
+    -webkit-box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.3); 
+    box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.3);
+}
+
+.single-follow-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 10px 0;
+}
+
+.single-follow-wrapper img{
+    width: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+#unfollow-btn{
+    border: 1px solid rgb(170, 170, 170);
+    background-color: #eee;
+    border-radius: 5px;
+    color: rgb(80, 80, 241);
+    height: auto;
+}
+
+.single-follow-wrapper span{
+    font-weight: bold;
+}
+
+@media only screen and (max-width: 1300px){
+    .follow-wrapper{
+        width: 90%;
+    }
+}

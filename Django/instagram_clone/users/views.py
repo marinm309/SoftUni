@@ -1,4 +1,5 @@
 from re import U
+from turtle import pos
 from django.shortcuts import redirect, render
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
@@ -39,8 +40,16 @@ def profile(request, pk):
     user = request.user.profile
     profile = Profile.objects.get(username=pk)
     posts = Post.objects.filter(user=profile)
-    
-    context = {'posts': posts, 'user': user, 'profile': profile}
+    total_posts = len(posts)
+    followers = UserFollowers.objects.filter(user=profile)
+    total_followers = len(followers)
+    following = UserFollowers.objects.filter(follower=profile.user)
+    total_following = len(following)
+    user_followers = UserFollowers.objects.filter(follower=user.user)
+    lst = []
+    for i in user_followers:
+        lst.append(i.user)
+    context = {'posts': posts, 'user': user, 'profile': profile, 'total_posts': total_posts, 'total_followers': total_followers, 'total_following': total_following, 'lst': lst}
     return render(request, 'users/profile.html', context)
 
 def edit_profile(request, pk):
@@ -58,7 +67,7 @@ def edit_profile(request, pk):
 
 def user_logout(request):
     logout(request)
-    return redirect('home')
+    return redirect('login')
 
 def search_results(request):
     user = request.user.profile

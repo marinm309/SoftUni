@@ -2,37 +2,77 @@
 
 {% block content %}
 
+{% load static %}
+
 {% for post in posts %}
-
-{% if post.user in lst or post.user == user %}
-
-<h3>{{post.user}}</h3>
-<h3>{{post.title}}</h3>
-{{post.description}}
-<p><a href="{% url 'like-post' post.id %}">Likes</a>: {{post.like}}</p>
-
-
-
-<h3>Comments:</h3>
-{%for comment in comments%}
-
-{% if comment.post == post %}
-<h4>{{comment.user}}: {{comment.description}}</h4>
+{% if post.user in lst %}
+<div class="post-wrapper">
+        <div class="post-top">
+            <div class="user-img"><a href="{% url 'profile' post.user %}"><img src="{% static 'images/default.png' %}" alt=""></a></div>
+            <div class="user-name"><h5><a href="{% url 'profile' post.user %}">{{post.user}}</a></h5></div>
+            {% if post.user not in lst and post.user != user %}
+            <div class="user-follow"><a href="{% url 'follow' post.user.id %}">Follow</a></div>
+            {% elif post.user in lst %}
+            <div class="user-follow"><a href="{% url 'unfollow' post.user.id %}" style="color: rgb(245, 56, 56);">Unfollow</a></div>
+            {% endif %}
+        </div>
+        <div class="post-img"><img src="{% static 'images/default.png' %}" alt=""></div>
+        <div class="post-bottom">
+            <div class="post-like">
+                <div class="like-btn"><a href="{% url 'like-post' post.id %}"><i class="fa fa-heart" style="font-size:30px;color:red"></i></a></div>
+                <div class="like-num"><h5>{{post.like}} Likes</h5></div>
+            </div>
+            <div class="post-description"><span><h5>{{post.user}}</h5></span><p>{{post.description}}</p></div>
+            <div class="post-comments">
+                <div class="view-comments"><p><a href="{% url 'single-post' post.id %}">View all {{post.num_of_comments}} comments</a></p></div>
+                <div class="time-ago"><h6>Created: {{post.created}}</h6></div>
+                <div class="add-comments">
+                    <form action="{% url 'create-comment' post.id %}" method="POST">
+                        {% csrf_token %}
+                        <input class="type-comments" type="text" placeholder="Add a comment..." name="comment">
+                        <input class="post-comments" value="Post" type="submit">
+                    </form>
+                </div>
+            </div>
+        </div>
+</div>
 {% endif %}
-
 {% endfor %}
-
-
-<form action="{% url 'create-comment' post.id %}" method="POST">
-    {% csrf_token %}
-    <input type="text" name="comment">
-    <input type="submit">
-</form>
-
+    
+{% for post in posts %}
+{% if post.user not in lst and post.user != user %}
+<hr>
+<div class="post-wrapper">
+        <div class="post-top">
+            <div class="user-img"><a href="{% url 'profile' post.user %}"><img src="{% static 'images/default.png' %}" alt=""></a></div>
+            <div class="user-name"><h5><a href="{% url 'profile' post.user %}">{{post.user}}</a></h5></div>
+            {% if post.user not in lst and post.user != user %}
+            <div class="user-follow"><a href="{% url 'follow' post.user.id %}">Follow</a></div>
+            {% elif post.user in lst %}
+            <div class="user-follow"><a href="{% url 'unfollow' post.user.id %}" style="color: rgb(245, 56, 56);">Unfollow</a></div>
+            {% endif %}
+        </div>
+        <div class="post-img"><img src="{% static 'images/default.png' %}" alt=""></div>
+        <div class="post-bottom">
+            <div class="post-like">
+                <div class="like-btn"><a href="{% url 'like-post' post.id %}"><i class="fa fa-heart" style="font-size:30px;color:red"></i></a></div>
+                <div class="like-num"><h5>{{post.like}} Likes</h5></div>
+            </div>
+            <div class="post-description"><span><h5>{{post.user}}</h5></span><p>{{post.description}}</p></div>
+            <div class="post-comments">
+                <div class="view-comments"><p><a href="{% url 'single-post' post.id %}">View all {{post.num_of_comments}} comments</a></p></div>
+                <div class="time-ago"><h6>Created: {{post.created}}</h6></div>
+                <div class="add-comments">
+                    <form action="{% url 'create-comment' post.id %}" method="POST">
+                        {% csrf_token %}
+                        <input class="type-comments" type="text" placeholder="Add a comment..." name="comment">
+                        <input class="post-comments" value="Post" type="submit">
+                    </form>
+                </div>
+            </div>
+        </div>
+</div>
 {% endif %}
-
-<br>
-
 {% endfor %}
 
 {% endblock content %}

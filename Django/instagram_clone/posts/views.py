@@ -16,7 +16,13 @@ def home(request):
     posts = Post.objects.all()
     posts = Post.objects.order_by('-created')
     comments = Comments.objects.all()
-    context = {'posts': posts, 'comments': comments, 'following': following, 'lst': lst, 'user': user}
+    dic = {}
+    for comment in comments:
+        if comment.post not in dic:
+            dic[comment.post] = [comment.description]
+        else:
+            dic[comment.post].append(comment.description)
+    context = {'posts': posts, 'comments': comments, 'following': following, 'lst': lst, 'user': user, 'dic': dic}
     return render(request, 'posts/home.html', context)
 
 
@@ -66,7 +72,7 @@ def like_post(request, pk):
         post.like -= 1
         post.save()
 
-    return redirect('home')
+    return redirect(request.META['HTTP_REFERER'])
 
 def create_comment(request, pk):
     user = request.user.profile
@@ -74,5 +80,18 @@ def create_comment(request, pk):
     description = request.POST['comment']
     comment = Comments.objects.create(user=user, post=post, description=description)
     comment.save()
+    post.num_of_comments += 1
+    post.save()
 
-    return redirect('home')
+    return redirect(request.META['HTTP_REFERER'])
+
+def single_post(request,pk):
+    user = request.user.profile
+    post = Post.objects.get(id=pk)
+    comments = Comments.objects.filter(post=post)
+    user_followers = UserFollowers.objects.filter(follower=user.user)
+    lst = []
+    for i in user_followers:
+        lst.append(i.user)
+    context = {'comments': comments, 'useer': user, 'post': post, 'lst': lst}
+    return render(request, 'posts/single_post.html', context)
