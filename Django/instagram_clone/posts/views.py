@@ -1,10 +1,11 @@
 from turtle import pos
 from django.shortcuts import redirect, render
+from numpy import empty
 from pkg_resources import ResolutionError
 from .forms import PostForm, CommentForm
-from.models import Post, Likes, Comments
+from.models import Post, Likes, Comments, CommentLikes
 from django.contrib.auth.decorators import login_required
-from users.models import UserFollowers
+from users.models import Profile, UserFollowers
 
 @login_required(login_url='login')
 def home(request):
@@ -30,8 +31,11 @@ def home(request):
 def create_post(request):
     form = PostForm()
     user = request.user.profile
+    profile = Profile.objects.get(user=user.user)
+    profile.total_posts += 1
+    profile.save()
     if request.method == 'POST':
-        form = PostForm(request.POST)
+        form = PostForm(request.POST, request.FILES)
         if form.is_valid:
             post = form.save(commit=False)
             post.user = user
@@ -43,6 +47,9 @@ def create_post(request):
 def delete_post(request, pk):
     user = request.user.profile
     post = Post.objects.get(id=pk)
+    profile = Profile.objects.get(user=user.user)
+    profile.total_posts -= 1
+    profile.save()
     post.delete()
     return redirect(f'/profile/{user.user}')
 
@@ -85,6 +92,31 @@ def create_comment(request, pk):
 
     return redirect(request.META['HTTP_REFERER'])
 
+def delete_comment(request, pk, ck):
+    user = request.user.profile
+    post = Post.objects.get(id=pk)
+    post.num_of_comments -= 1
+    post.save()
+    comment = Comments.objects.get(id=ck)
+    comment.delete()
+
+    return redirect(request.META['HTTP_REFERER'])
+
+def like_comment(request, pk):
+    user = request.user.profile
+    comment = Comments.objects.get(id=pk)
+    like = CommentLikes.objects.filter(user=user, comment=comment)
+    if len(like) == 0:
+        like = CommentLikes.objects.create(user=user, comment=comment)
+        comment.likes += 1
+        comment.save()
+    else:
+        like = CommentLikes.objects.get(user=user, comment=comment)
+        like.delete()
+        comment.likes -= 1
+        comment.save()
+    return redirect(request.META['HTTP_REFERER'])
+
 def single_post(request,pk):
     user = request.user.profile
     post = Post.objects.get(id=pk)
@@ -93,5 +125,10 @@ def single_post(request,pk):
     lst = []
     for i in user_followers:
         lst.append(i.user)
-    context = {'comments': comments, 'useer': user, 'post': post, 'lst': lst}
+    if len(comments) == 0:
+        empty = True
+    else:
+        empty = False
+
+    context = {'comments': comments, 'user': user, 'post': post, 'lst': lst, 'empty': empty}
     return render(request, 'posts/single_post.html', context)

@@ -8,7 +8,7 @@
     <div class="profile-wrapper-editor">
         <section class="user-details">
             <div class="user-img-large">
-                <img src="{% static 'images/default.png' %}" alt="">
+                <img src="{{profile.profile_pic.url}}" alt="">
                 {% if profile.user.profile in lst %}
                 <div class="profile-follow"><a style="color: rgb(245, 56, 56);" href="{% url 'unfollow' profile.id %}">Unfollow</a></div>
                 {% elif profile.user not in lst and profile.user.profile != user %}
@@ -22,8 +22,8 @@
                 <div class="stats-info">
                     <ul>
                         <li><span>{{total_posts}}</span> posts</li>
-                        <li><a href="{% url 'followers' user.id %}"><span>{{total_followers}}</span> followers</a></li>
-                        <li><a href="{% url 'following' user.id %}"><span>{{total_following}}</span> following</a></li>
+                        <li><a href="{% url 'followers' profile.user.profile %}"><span>{{total_followers}}</span> followers</a></li>
+                        <li><a href="{% url 'following' profile.user.profile %}"><span>{{total_following}}</span> following</a></li>
                     </ul>
                 </div>
                 <div class="user-info">
@@ -50,7 +50,7 @@
         <section class="user-posts">
             {% for post in posts %}
             <div class="single-post">
-                <a href="{% url 'single-post' post.id %}"><img src="{% static 'images/default.png' %}" alt=""></a>
+                <a href="{% url 'single-post' post.id %}"><img src="{{post.photo.url}}" alt=""></a>
             </div>
             {% endfor %}
         </section>

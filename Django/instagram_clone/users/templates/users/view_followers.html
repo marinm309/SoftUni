@@ -2,26 +2,28 @@
 
 {% block content %}
 
-<h1>{{profile.user}}'s FOLLOWERS</h1>
-<hr>
+{% load static %}
 
-{% for follower in followers %}
-
-{{follower.follower}}
-<a href="{% url 'profile' follower.follower %}">View Profile</a>
-
-{% if follower.follower.profile.username in following_lst and user.user == profile.user %}
-
-<a href="{% url 'unfollow' follower.follower.profile.id %}">Unfollow</a>
-
-{% elif follower.follower.profile.username not in following_lst and user.user == profile.user %}
-
-<a href="{% url 'follow' follower.follower.profile.id %}">Follow</a>
-
-{% endif %}
-<br>
-{% endfor %}
-
-<a href="{% url 'profile' profile.user.username %}">Go back</a>
+<div class="follow-wrapper">
+    <h1 style="text-align: center;">{{profile.user.profile}}'s followers</h1>
+    {% if total_followers != 0 %}
+    {% for follower in followers %}
+    <div class="single-follow-wrapper">
+        <a href="{% url 'profile' follower.follower.profile.username %}"><img src="{{follower.follower.profile.profile_pic.url}}" alt=""></a>
+        <h5><a href="{% url 'profile' follower.follower.profile.username %}">{{follower.follower}}</a></h5>
+        {% if follower.follower.profile.username in following_lst %}
+        <h4><a id="unfollow-btn" href="{% url 'unfollow' follower.follower.profile.id %}" style="color: rgb(245, 56, 56);">Unfollow</a></h4>
+        {% elif follower.follower.profile.username not in following_lst and follower.follower != user.user %}
+        <h4><a id="unfollow-btn" href="{% url 'follow' follower.follower.profile.id %}">Follow</a></h4>
+        {% endif %}
+        <p><span>{{follower.follower.profile.total_posts}}</span> posts</p>
+        <p><a href="{% url 'followers' follower.follower.profile %}"><span>{{follower.follower.profile.total_followers}}</span> followers</a></p>
+        <p><a href="{% url 'following' follower.follower.profile %}"><span>{{follower.follower.profile.total_following}}</span> following</a></p>
+    </div>
+    {% endfor %}
+    {% elif total_followers == 0 %}
+    <h1 style="text-align: center; margin-top: 150px;">No followers yet</h1>
+    {% endif %}
+</div>
 
 {% endblock content %}

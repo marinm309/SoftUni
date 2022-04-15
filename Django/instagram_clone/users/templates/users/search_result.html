@@ -2,30 +2,37 @@
 
 {% block content %}
 
+{% load static %}
+
 {% if match %}
-{% for profile in profiles %}
+
+<div class="follow-wrapper">
+    <h1 style="text-align: center;">Search results</h1>
+    {% for profile in profiles %}
+    {% if profile.user != user.user %}
+    <div class="single-follow-wrapper">
+        <a href="{% url 'profile' profile.user %}"><img src="{{profile.profile_pic.url}}" alt=""></a>
+        <h5><a href="{% url 'profile' profile.user %}">{{profile.user}}</a></h5>
+        {% if profile.user.profile in lst %}
+        <h4><a id="unfollow-btn" href="{% url 'unfollow' profile.user.profile.id %}" style="color: rgb(245, 56, 56);">Unfollow</a></h4>
+        {% else %}
+        <h4><a id="unfollow-btn" href="{% url 'follow' profile.user.profile.id %}">Follow</a></h4>
+        {% endif %}
+        <p><span>{{profile.total_posts}}</span> posts</p>
+        <p><a href="{% url 'followers' profile.username %}"><span>{{profile.total_followers}}</span> followers</a></p>
+        <p><a href="{% url 'following' profile.username %}"><span>{{profile.total_following}}</span> following</a></p>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
 
 
-{{profile}}
-
-<a href="{% url 'profile' profile.username %}">View Profile</a>
-
-{% if profile != user and profile not in lst %}
-
-    <a href="{% url 'follow' profile.id %}">Follow</a>
-
-{% elif profile != user and profile in lst %}
-
-    <a href="{% url 'unfollow' profile.id %}">Unfollow</a>
-
-{% endif %}
-<br>
-
-{% endfor %}
 
 {% else %}
 
-<h1>No Matches</h1>
+    <div class="follow-wrapper">
+        <h1 style="text-align: center;">No Matches</h1>
+    </div>
 
 {% endif %}
 

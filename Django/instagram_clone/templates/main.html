@@ -20,7 +20,8 @@
     <nav>
         <div class="nav-elements">
             <h1 class="logo"><a href="{% url 'home' %}">Instagram</a></h1>
-            <form action="" method="POST">
+            <form action="{% url 'search-result' %}" method="POST">
+                {% csrf_token %}
                 <div class="nav-search">
                     <i class="fa fa-search"></i>
                     <input type="text" name="search" placeholder="Search...">

@@ -8,15 +8,18 @@ from .forms import ProfileForm
 from django.contrib.auth.decorators import login_required
 from posts.models import Post
 from .models import *
+from .forms import CustomUserCreationForm
 
 
 def user_register(request):
-    form = UserCreationForm()
+    form = CustomUserCreationForm()
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid:
             form.save()
             return redirect('login')
+        else:
+            return redirect('register')
     context = {'form': form}
     return render(request, 'users/register.html', context)
 
@@ -104,6 +107,10 @@ def follow(request, pk):
     user = request.user.profile
     to_follow = Profile.objects.get(id=pk)
     profile = Profile.objects.get(id=user.id)
+    to_follow.total_followers += 1
+    to_follow.save()
+    profile.total_following += 1
+    profile.save()
     possible = UserFollowers.objects.filter(user=to_follow, follower=profile.user)
     if len(possible) == 0:
         UserFollowers.objects.create(user=to_follow, follower=profile.user)
@@ -113,6 +120,10 @@ def unfollow(request, pk):
     user = request.user.profile
     to_unfollow = Profile.objects.get(id=pk)
     profile = Profile.objects.get(id=user.id)
+    to_unfollow.total_followers -= 1
+    to_unfollow.save()
+    profile.total_following -= 1
+    profile.save()
     possible = UserFollowers.objects.filter(user=to_unfollow, follower=profile.user)
     if len(possible) != 0:
         form = UserFollowers.objects.get(user=to_unfollow, follower=profile.user)
@@ -122,23 +133,27 @@ def unfollow(request, pk):
 
 def view_followers(request, pk):
     user = request.user.profile
-    profile = Profile.objects.get(id=pk)
+    profile = Profile.objects.get(username=pk)
     followers = UserFollowers.objects.filter(user=profile)
-    following = UserFollowers.objects.filter(follower=profile.user)
+    following = UserFollowers.objects.filter(follower=user.user)
+    total_followers = len(followers)
     following_lst = []
     for i in following:
         following_lst.append(i.user.username)
-    context = {'followers': followers, 'following_lst': following_lst, 'user': user, 'profile': profile}
+    context = {'followers': followers, 'following_lst': following_lst, 'user': user, 'profile': profile, 'total_followers': total_followers}
     return render(request, 'users/view_followers.html', context)
 
 
 def view_following(request, pk):
     user = request.user.profile
-    profile = Profile.objects.get(id=pk)
+    profile = Profile.objects.get(username=pk)
     followers = UserFollowers.objects.filter(follower=user.user)
     following = UserFollowers.objects.filter(follower=profile.user)
+    total_following = len(following)
     following_lst = []
     for i in followers:
         following_lst.append(i.user.username)
-    context = {'user': user, 'profile': profile, 'following_lst': following_lst, 'following': following}
+    print(following_lst)
+    context = {'user': user, 'profile': profile, 'following_lst': following_lst, 'following': following, 'total_following': total_following}
     return render(request, 'users/view_following.html', context)
+

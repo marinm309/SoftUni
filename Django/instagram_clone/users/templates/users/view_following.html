@@ -2,31 +2,28 @@
 
 {% block content %}
 
-<h1>{{profile.user}}'s FOLLOWINGS</h1>
-<hr>
+{% load static %}
 
-{% for i in following %}
-
-{{i.user}}
-
-<a href="{% url 'profile' i.user.username %}">View Profile</a>
-
-{% if user.user == profile.user %}
-
-<a href="{% url 'unfollow' i.user.id %}">Unfollow</a>
-
-{% elif user.user != profile.user and i.user != user and i.user.username not in following_lst %}
-
-<a href="{% url 'follow' i.user.id %}">Follow</a>
-
-{% elif user.user != profile.user and i.user != user and i.user.username in following_lst %}
-
-<a href="{% url 'unfollow' i.user.id %}">Unfollow</a>
-
-{% endif %}
-
-<br>
-{% endfor %}
-
+<div class="follow-wrapper">
+    <h1 style="text-align: center;">{{profile.user.profile}}'s followings</h1>
+    {% if total_following != 0 %}
+    {% for following in following %}
+    <div class="single-follow-wrapper">
+        <a href="{% url 'profile' following.user.user.profile.username %}"><img src="{{following.user.user.profile.profile_pic.url}}" alt=""></a>
+        <h5><a href="{% url 'profile' following.user.user.profile.username %}">{{following.user}}</a></h5>
+        {% if following.user.user.profile.username in following_lst %}
+        <h4><a id="unfollow-btn" href="{% url 'unfollow' following.user.user.profile.id %}" style="color: rgb(245, 56, 56);">Unfollow</a></h4>
+        {% elif following.user not in following_lst and following.user != user.user.profile %}
+        <h4><a id="unfollow-btn" href="{% url 'follow' following.user.user.profile.id %}">Follow</a></h4>
+        {% endif %}
+        <p><span>{{following.user.user.profile.total_posts}}</span> posts</p>
+        <p><a href="{% url 'followers' following.user.user.profile.username %}"><span>{{following.user.user.profile.total_followers}}</span> followers</a></p>
+        <p><a href="{% url 'following' following.user.user.profile.username %}"><span>{{following.user.user.profile.total_following}}</span> following</a></p>
+    </div>
+    {% endfor %}
+    {% elif total_following == 0 %}
+    <h1 style="text-align: center; margin-top: 150px;">Not following anyone</h1>
+    {% endif %}
+</div>
 
 {% endblock content %}
