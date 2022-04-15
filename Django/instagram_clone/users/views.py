@@ -1,5 +1,3 @@
-from re import U
-from turtle import pos
 from django.shortcuts import redirect, render
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
@@ -13,7 +11,9 @@ from .forms import CustomUserCreationForm
 
 def user_register(request):
     form = CustomUserCreationForm()
-    if request.method == 'POST':
+    if request.user.is_authenticated:
+        return redirect('home')
+    elif request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid:
             form.save()
@@ -23,8 +23,11 @@ def user_register(request):
     context = {'form': form}
     return render(request, 'users/register.html', context)
 
+
 def user_login(request):
-    if request.method == 'POST':
+    if request.user.is_authenticated:
+        return redirect('home')
+    elif request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
         try:
@@ -39,6 +42,7 @@ def user_login(request):
     return render(request, 'users/login.html', context)
 
 
+@login_required(login_url='login')
 def profile(request, pk):
     user = request.user.profile
     profile = Profile.objects.get(username=pk)
@@ -55,6 +59,7 @@ def profile(request, pk):
     context = {'posts': posts, 'user': user, 'profile': profile, 'total_posts': total_posts, 'total_followers': total_followers, 'total_following': total_following, 'lst': lst}
     return render(request, 'users/profile.html', context)
 
+@login_required(login_url='login')
 def edit_profile(request, pk):
     user = request.user.profile
     profile = Profile.objects.get(id=pk)
@@ -68,10 +73,12 @@ def edit_profile(request, pk):
     context = {'form': form, 'user': user}
     return render(request, 'users/edit_profile.html', context)
 
+@login_required(login_url='login')
 def user_logout(request):
     logout(request)
     return redirect('login')
 
+@login_required(login_url='login')
 def search_results(request):
     user = request.user.profile
     profile = Profile.objects.get(id=user.id)
@@ -103,6 +110,7 @@ def search_results(request):
     return render(request, 'users/search_result.html', context)
 
 
+@login_required(login_url='login')
 def follow(request, pk):
     user = request.user.profile
     to_follow = Profile.objects.get(id=pk)
@@ -116,6 +124,7 @@ def follow(request, pk):
         UserFollowers.objects.create(user=to_follow, follower=profile.user)
     return redirect(request.META['HTTP_REFERER'])
 
+@login_required(login_url='login')
 def unfollow(request, pk):
     user = request.user.profile
     to_unfollow = Profile.objects.get(id=pk)
@@ -131,6 +140,7 @@ def unfollow(request, pk):
     return redirect(request.META['HTTP_REFERER'])
 
 
+@login_required(login_url='login')
 def view_followers(request, pk):
     user = request.user.profile
     profile = Profile.objects.get(username=pk)
@@ -144,6 +154,7 @@ def view_followers(request, pk):
     return render(request, 'users/view_followers.html', context)
 
 
+@login_required(login_url='login')
 def view_following(request, pk):
     user = request.user.profile
     profile = Profile.objects.get(username=pk)

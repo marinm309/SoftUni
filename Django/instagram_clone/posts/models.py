@@ -34,7 +34,7 @@ class Likes(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
 
     def __str__(self) -> str:
-        return str(self.user)
+        return str(self.post)
 
 class CommentLikes(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True, editable=False)
@@ -43,4 +43,4 @@ class CommentLikes(models.Model):
     comment = models.ForeignKey(Comments, null=True, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return str(self.user)
+        return str(self.comment)

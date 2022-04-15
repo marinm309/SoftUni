@@ -32,18 +32,19 @@ def create_post(request):
     form = PostForm()
     user = request.user.profile
     profile = Profile.objects.get(user=user.user)
-    profile.total_posts += 1
-    profile.save()
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
         if form.is_valid:
             post = form.save(commit=False)
             post.user = user
             post.save()
+            profile.total_posts += 1
+            profile.save()
             return redirect('home')
-    context = {'form': form}
+    context = {'form': form, 'user': user}
     return render(request, 'posts/create_post.html', context)
 
+@login_required(login_url='login')
 def delete_post(request, pk):
     user = request.user.profile
     post = Post.objects.get(id=pk)
@@ -53,6 +54,7 @@ def delete_post(request, pk):
     post.delete()
     return redirect(f'/profile/{user.user}')
 
+@login_required(login_url='login')
 def edit_post(request, pk):
     user = request.user.profile
     post = Post.objects.get(id=pk)
@@ -65,6 +67,7 @@ def edit_post(request, pk):
     context = {'form': form}
     return render(request, 'posts/create_post.html', context)
 
+@login_required(login_url='login')
 def like_post(request, pk):
     user = request.user.profile
     post = Post.objects.get(id=pk)
@@ -81,6 +84,7 @@ def like_post(request, pk):
 
     return redirect(request.META['HTTP_REFERER'])
 
+@login_required(login_url='login')
 def create_comment(request, pk):
     user = request.user.profile
     post = Post.objects.get(id=pk)
@@ -92,6 +96,7 @@ def create_comment(request, pk):
 
     return redirect(request.META['HTTP_REFERER'])
 
+@login_required(login_url='login')
 def delete_comment(request, pk, ck):
     user = request.user.profile
     post = Post.objects.get(id=pk)
@@ -102,6 +107,7 @@ def delete_comment(request, pk, ck):
 
     return redirect(request.META['HTTP_REFERER'])
 
+@login_required(login_url='login')
 def like_comment(request, pk):
     user = request.user.profile
     comment = Comments.objects.get(id=pk)
@@ -117,6 +123,7 @@ def like_comment(request, pk):
         comment.save()
     return redirect(request.META['HTTP_REFERER'])
 
+@login_required(login_url='login')
 def single_post(request,pk):
     user = request.user.profile
     post = Post.objects.get(id=pk)

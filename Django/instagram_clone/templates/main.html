@@ -29,9 +29,8 @@
             </form>
             <ul class="main-nav">
                 <li><a href="{% url 'home' %}"><i class='fa fa-home'></i></a></li>
-                <!-- <li><a href="">Login/Register</a></li> -->
                 <li><a href="{% url 'create-post' %}"><i class="fa fa-plus-square"></i></a></li>
-                <li><a href="{% url 'profile' user.username %}"><img src="{% static 'images/default.png' %}" alt="" class="nav-profile"></a></li>
+                <li><a href="{% url 'profile' user.username %}"><img src="{{user.user.profile.profile_pic.url}}" alt="" class="nav-profile"></a></li>
             </ul>
         </div>
     </nav>

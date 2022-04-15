@@ -7,11 +7,11 @@
 <div class="single-post-wrapper">
     <div class="post-wrapper single">
         <div class="post-top">
-            <div class="user-img"><a href=""><img src="{{post.user.user.profile.profile_pic.url}}" alt=""></a></div>
-            <div class="user-name"><h5><a href="">{{post.user}}</a></h5></div>
+            <div class="user-img"><a href="{% url 'profile' post.user %}"><img src="{{post.user.user.profile.profile_pic.url}}" alt=""></a></div>
+            <div class="user-name"><h5><a href="{% url 'profile' post.user %}">{{post.user}}</a></h5></div>
             {% if post.user in lst %}
             <div  class="user-follow"><a href="{% url 'unfollow' post.user.id %}" style="color: rgb(245, 56, 56);" >Unfollow</a></div>
-            {% elif post.user not in lst and post.user != user.profile %}
+            {% elif post.user not in lst and post.user.user != user.user %}
             <div class="user-follow"><a href="{% url 'follow' post.user.id %}">Follow</a></div>
             {% endif %}
         </div>
