@@ -5,7 +5,7 @@
 {% load static %}
 
 {% for post in posts %}
-{% if post.user in lst %}
+{% if post.user in lst or post.user == user %}
 <div class="post-wrapper">
         <div class="post-top">
             <div class="user-img home"><a href="{% url 'profile' post.user %}"><img src="{{post.user.user.profile.profile_pic.url}}" alt=""></a></div>
@@ -24,8 +24,12 @@
             </div>
             <div class="post-description"><span><h5>{{post.user}}</h5></span><p>{{post.description}}</p></div>
             <div class="post-comments">
-                <div class="view-comments"><p><a href="{% url 'single-post' post.id %}">View all {{post.num_of_comments}} comments</a></p></div>
-                <div class="time-ago"><h6>Created: {{post.created}}</h6></div>
+                {% if post.num_of_comments != 0 %}
+                <div class="view-comments"><p><a href="{% url 'single-post' post.id %}">{{post.num_of_comments|pluralize:"View all"}} {{post.num_of_comments}} comment{{post.num_of_comments|pluralize:"s"}}</a></p></div>
+                {% else %}
+                <div class="view-comments"><p><a href="{% url 'single-post' post.id %}">No comments yet</a></p></div>
+                {% endif %}
+                <div class="time-ago"><h6>{{post.get_date}}</h6></div>
                 <div class="add-comments">
                     <form action="{% url 'create-comment' post.id %}" method="POST">
                         {% csrf_token %}
@@ -55,12 +59,12 @@
         <div class="post-bottom">
             <div class="post-like">
                 <div class="like-btn"><a href="{% url 'like-post' post.id %}"><i class="fa fa-heart" style="font-size:30px;color:red"></i></a></div>
-                <div class="like-num"><h5>{{post.like}} Likes</h5></div>
+                <div class="like-num"><h5>{{post.like}} Like{{post.like|pluralize:"s"}}</h5></div>
             </div>
             <div class="post-description"><span><h5>{{post.user}}</h5></span><p>{{post.description}}</p></div>
             <div class="post-comments">
-                <div class="view-comments"><p><a href="{% url 'single-post' post.id %}">View all {{post.num_of_comments}} comments</a></p></div>
-                <div class="time-ago"><h6>Created: {{post.created}}</h6></div>
+                <div class="view-comments"><p><a href="{% url 'single-post' post.id %}">View all {{post.num_of_comments}} comment{{post.num_of_comments|pluralize:"s"}}</a></p></div>
+                <div class="time-ago"><h6>{{post.get_date}}</h6></div>
                 <div class="add-comments">
                     <form action="{% url 'create-comment' post.id %}" method="POST">
                         {% csrf_token %}

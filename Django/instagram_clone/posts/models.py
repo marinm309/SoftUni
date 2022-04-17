@@ -1,6 +1,7 @@
 from django.db import models
 import uuid
 from users.models import Profile
+from django.contrib.humanize.templatetags import humanize
 
 class Post(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True, editable=False)
@@ -11,6 +12,10 @@ class Post(models.Model):
     like = models.IntegerField(default=0, null=True)
     num_of_comments = models.IntegerField(default=0, null=True)
     photo = models.ImageField(null=True, upload_to='posts')
+
+    
+    def get_date(self):
+        return humanize.naturaltime(self.created)
 
     def __str__(self) -> str:
         return str(self.title)
@@ -23,6 +28,10 @@ class Comments(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
     description = models.TextField(null=True)
     likes = models.IntegerField(default=0, null=True)
+
+
+    def get_date(self):
+        return humanize.naturaltime(self.created)
 
     def __str__(self) -> str:
         return str(self.description)

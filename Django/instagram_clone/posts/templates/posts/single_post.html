@@ -19,11 +19,11 @@
         <div class="post-bottom">
             <div class="post-like">
                 <div class="like-btn"><a href="{% url 'like-post' post.id %}"><i class="fa fa-heart" style="font-size:30px;color:red"></i></a></div>
-                <div class="like-num"><h5>{{post.like}} Likes</h5></div>
+                <div class="like-num"><h5>{{post.like}} Like{{post.like|pluralize:"s"}}</h5></div>
             </div>
             <div class="post-description"><span><h5>{{post.user}}</h5></span><p>{{post.description}}</p></div>
             <div class="post-comments">
-                <div class="time-ago single-post-time"><h6>Created: {{post.created}}</h6></div>
+                <div class="time-ago single-post-time"><h6>{{post.get_date}}</h6></div>
                 <div class="add-comments">
                     <form action="{% url 'create-comment' post.id %}" method="POST">
                         {% csrf_token %}
@@ -42,6 +42,7 @@
             <div class="post-top single-top">
                 <div class="user-img"><a href="{% url 'profile' comment.user %}"><img src="{{comment.user.user.profile.profile_pic.url}}" alt=""></a></div>
                 <div class="user-name"><h5><a href="{% url 'profile' comment.user %}">{{comment.user}}</a></h5></div>
+                <div style="margin-left: 20px;" class="user-name"><h5>{{comment.get_date}}</h5></div>
             </div>
             <div class="single-post-comment">
                 <h5>{{comment.description}}</h5>

@@ -1,7 +1,4 @@
-from turtle import pos
 from django.shortcuts import redirect, render
-from numpy import empty
-from pkg_resources import ResolutionError
 from .forms import PostForm, CommentForm
 from.models import Post, Likes, Comments, CommentLikes
 from django.contrib.auth.decorators import login_required

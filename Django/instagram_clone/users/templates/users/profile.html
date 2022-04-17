@@ -21,9 +21,9 @@
                 <div><h3>{{profile.user}}</h3></div>
                 <div class="stats-info">
                     <ul>
-                        <li><span>{{total_posts}}</span> posts</li>
-                        <li><a href="{% url 'followers' profile.user.profile %}"><span>{{total_followers}}</span> followers</a></li>
-                        <li><a href="{% url 'following' profile.user.profile %}"><span>{{total_following}}</span> following</a></li>
+                        <li><span>{{total_posts}}</span> post{{total_posts|pluralize:"s"}}</li>
+                        <li><a href="{% url 'followers' profile.user.profile %}"><span>{{total_followers}}</span> follower{{total_followers|pluralize:"s"}}</a></li>
+                        <li><a href="{% url 'following' profile.user.profile %}"><span>{{total_following}}</span> following{{total_following|pluralize:"s"}}</a></li>
                     </ul>
                 </div>
                 <div class="user-info">
