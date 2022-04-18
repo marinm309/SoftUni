@@ -3,6 +3,7 @@ from .forms import PostForm, CommentForm
 from.models import Post, Likes, Comments, CommentLikes
 from django.contrib.auth.decorators import login_required
 from users.models import Profile, UserFollowers
+import os
 
 @login_required(login_url='login')
 def home(request):
@@ -31,9 +32,14 @@ def create_post(request):
     profile = Profile.objects.get(user=user.user)
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
+        extesion = os.path.splitext(str(request.FILES['file_upload']))[1]
         if form.is_valid:
             post = form.save(commit=False)
             post.user = user
+            if extesion == '.mp4':
+                post.post_type = 'video'
+            else:
+                post.post_type = 'photo'
             post.save()
             profile.total_posts += 1
             profile.save()

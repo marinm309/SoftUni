@@ -97,7 +97,7 @@ nav form{
     border: none;
     background-color: white;
     width: 600px;
-    height: 910px;
+    height: auto;
     margin: 50px auto;
     border: 1px solid rgb(170, 170, 170);
     -webkit-box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.3); 
@@ -137,9 +137,18 @@ nav form{
 
 .post-img img{
     width: 100%;
-    height: 600px;
+    max-height: 90vh;
     object-fit: cover;
     background-color: #eee;
+    background-color: black;
+}
+
+.post-img video{
+    width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+    background-color: #eee;
+    background-color: black;
 }
 
 .post-like{

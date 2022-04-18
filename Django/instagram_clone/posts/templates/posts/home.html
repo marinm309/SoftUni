@@ -16,7 +16,15 @@
             <div class="user-follow"><a href="{% url 'unfollow' post.user.id %}" style="color: rgb(245, 56, 56);">Unfollow</a></div>
             {% endif %}
         </div>
-        <div class="post-img"><img src="{{post.photo.url}}" alt=""></div>
+        {% if post.post_type == 'photo' %}
+        <div class="post-img"><img src="{{post.file_upload.url}}" alt=""></div>
+        {% elif post.post_type == 'video' %}
+        <div class="post-img">
+            <video controls muted width="400">
+                <source src="{{post.file_upload.url}}" type="video/mp4">
+            </video>
+        </div>
+        {% endif %}
         <div class="post-bottom">
             <div class="post-like">
                 <div class="like-btn"><a href="{% url 'like-post' post.id %}"><i class="fa fa-heart" style="font-size:30px;color:red"></i></a></div>
@@ -24,10 +32,10 @@
             </div>
             <div class="post-description"><span><h5>{{post.user}}</h5></span><p>{{post.description}}</p></div>
             <div class="post-comments">
-                {% if post.num_of_comments != 0 %}
+                {% if post.num_of_comments > 1 %}
                 <div class="view-comments"><p><a href="{% url 'single-post' post.id %}">{{post.num_of_comments|pluralize:"View all"}} {{post.num_of_comments}} comment{{post.num_of_comments|pluralize:"s"}}</a></p></div>
-                {% else %}
-                <div class="view-comments"><p><a href="{% url 'single-post' post.id %}">No comments yet</a></p></div>
+                {% elif post.num_of_comments == 1 %}
+                <div class="view-comments"><p><a href="{% url 'single-post' post.id %}">View 1 comment</a></p></div>
                 {% endif %}
                 <div class="time-ago"><h6>{{post.get_date}}</h6></div>
                 <div class="add-comments">
@@ -55,7 +63,7 @@
             <div class="user-follow"><a href="{% url 'unfollow' post.user.id %}" style="color: rgb(245, 56, 56);">Unfollow</a></div>
             {% endif %}
         </div>
-        <div class="post-img"><img src="{{post.photo.url}}" alt=""></div>
+        <div class="post-img"><img src="{{post.file_upload.url}}" alt=""></div>
         <div class="post-bottom">
             <div class="post-like">
                 <div class="like-btn"><a href="{% url 'like-post' post.id %}"><i class="fa fa-heart" style="font-size:30px;color:red"></i></a></div>

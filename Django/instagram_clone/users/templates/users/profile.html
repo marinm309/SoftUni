@@ -50,7 +50,17 @@
         <section class="user-posts">
             {% for post in posts %}
             <div class="single-post">
-                <a href="{% url 'single-post' post.id %}"><img src="{{post.photo.url}}" alt=""></a>
+                {% if post.post_type == 'photo' %}
+                    <div class="post-img"><a href="{% url 'single-post' post.id %}"><img style="overflow: hidden; height: 400px;" src="{{post.file_upload.url}}" alt=""></a></div>
+                {% elif post.post_type == 'video' %}
+                    <div class="post-img" style="overflow: hidden;">
+                        <a href="{% url 'single-post' post.id %}">
+                            <video muted width="400" style="overflow: hidden; height: 400px;">
+                                <source src="{{post.file_upload.url}}" type="video/mp4">
+                            </video>
+                        </a>
+                    </div>
+                {% endif %}
             </div>
             {% endfor %}
         </section>

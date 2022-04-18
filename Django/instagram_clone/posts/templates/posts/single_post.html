@@ -15,7 +15,15 @@
             <div class="user-follow"><a href="{% url 'follow' post.user.id %}">Follow</a></div>
             {% endif %}
         </div>
-        <div class="post-img"><img src="{{post.photo.url}}" alt=""></div>
+        {% if post.post_type == 'photo' %}
+        <div class="post-img"><img src="{{post.file_upload.url}}" alt=""></div>
+        {% elif post.post_type == 'video' %}
+        <div class="post-img">
+            <video controls muted width="400">
+                <source src="{{post.file_upload.url}}" type="video/mp4">
+            </video>
+        </div>
+        {% endif %}
         <div class="post-bottom">
             <div class="post-like">
                 <div class="like-btn"><a href="{% url 'like-post' post.id %}"><i class="fa fa-heart" style="font-size:30px;color:red"></i></a></div>

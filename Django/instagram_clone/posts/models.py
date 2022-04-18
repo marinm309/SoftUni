@@ -2,6 +2,7 @@ from django.db import models
 import uuid
 from users.models import Profile
 from django.contrib.humanize.templatetags import humanize
+from django.core.validators import FileExtensionValidator
 
 class Post(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True, editable=False)
@@ -12,6 +13,8 @@ class Post(models.Model):
     like = models.IntegerField(default=0, null=True)
     num_of_comments = models.IntegerField(default=0, null=True)
     photo = models.ImageField(null=True, upload_to='posts')
+    file_upload = models.FileField(null=True, upload_to='posts', validators=[FileExtensionValidator(allowed_extensions=['MOV','avi','mp4','webm','mkv','png','jpg'])])
+    post_type = models.CharField(max_length=100, null=True)
 
     
     def get_date(self):
