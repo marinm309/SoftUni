@@ -74,16 +74,15 @@ def edit_post(request, pk):
 def like_post(request, pk):
     user = request.user.profile
     post = Post.objects.get(id=pk)
-    like = Likes.objects.filter(user=user, post=post)
+    like = Likes.objects.filter(user=user, post_liked=post)
     if len(like) == 0:
-        like = Likes.objects.create(user=user, post=post)
-        post.like += 1
+        like = Likes.objects.create(user=user, post_liked=post)
+        post.user_liked = like
         post.save()
     else:
-        like = Likes.objects.get(user=user, post=post)
+        like = Likes.objects.get(user=user, post_liked=post)
         like.delete()
-        post.like -= 1
-        post.save()
+        
 
     return redirect(request.META['HTTP_REFERER'])
 

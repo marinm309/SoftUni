@@ -18,7 +18,6 @@
         {% else %}
         <h4><a id="unfollow-btn" href="{% url 'follow' profile.user.profile.id %}">Follow</a></h4>
         {% endif %}
-        <p><span>{{profile.total_posts}}</span> posts</p>
         <p><a href="{% url 'followers' profile.username %}"><span>{{profile.total_followers}}</span> followers</a></p>
         <p><a href="{% url 'following' profile.username %}"><span>{{profile.total_following}}</span> following</a></p>
     </div>

@@ -15,13 +15,26 @@ class Post(models.Model):
     photo = models.ImageField(null=True, upload_to='posts')
     file_upload = models.FileField(null=True, upload_to='posts', validators=[FileExtensionValidator(allowed_extensions=['MOV','avi','mp4','webm','mkv','png','jpg'])])
     post_type = models.CharField(max_length=100, null=True)
+    user_liked = models.ForeignKey('Likes', on_delete=models.SET_NULL, null=True)
 
     
     def get_date(self):
         return humanize.naturaltime(self.created)
 
+    def num_of_posts(self, user):
+        posts = Post.objects.filter(user = user)
+        return len(posts)
+
+    def num_of_likes(self):
+        likes = Likes.objects.filter(post_liked = self)
+        return len(likes)
+
+    def num_of_comments(self):
+        comments = Comments.objects.filter(post=self)
+        return len(comments)
+
     def __str__(self) -> str:
-        return str(self.title)
+        return str(self.id)
 
 
 class Comments(models.Model):
@@ -31,10 +44,15 @@ class Comments(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
     description = models.TextField(null=True)
     likes = models.IntegerField(default=0, null=True)
+    user_liked = models.ForeignKey('CommentLikes', on_delete=models.SET_NULL, null=True)
 
 
     def get_date(self):
         return humanize.naturaltime(self.created)
+
+    def num_of_likes(self):
+        likes = CommentLikes.objects.filter(comment=self)
+        return len(likes)
 
     def __str__(self) -> str:
         return str(self.description)
@@ -43,10 +61,10 @@ class Likes(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True, editable=False)
     created = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(Profile, null=True, on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
+    post_liked = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
 
     def __str__(self) -> str:
-        return str(self.post)
+        return str(self.id)
 
 class CommentLikes(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True, editable=False)

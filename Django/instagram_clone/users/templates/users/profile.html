@@ -21,9 +21,9 @@
                 <div><h3>{{profile.user}}</h3></div>
                 <div class="stats-info">
                     <ul>
-                        <li><span>{{total_posts}}</span> post{{total_posts|pluralize:"s"}}</li>
-                        <li><a href="{% url 'followers' profile.user.profile %}"><span>{{total_followers}}</span> follower{{total_followers|pluralize:"s"}}</a></li>
-                        <li><a href="{% url 'following' profile.user.profile %}"><span>{{total_following}}</span> following{{total_following|pluralize:"s"}}</a></li>
+                        <li><span>{{total_posts}}</span> post{{profile.user.num_of_posts|pluralize:"s"}}</li>
+                        <li><a href="{% url 'followers' profile.user.profile %}"><span>{{profile.user.profile.num_of_followers}}</span> follower{{profile.user.profile.num_of_followers|pluralize:"s"}}</a></li>
+                        <li><a href="{% url 'following' profile.user.profile %}"><span>{{profile.user.profile.num_of_followings}}</span> following{{profile.user.profile.num_of_followings|pluralize:"s"}}</a></li>
                     </ul>
                 </div>
                 <div class="user-info">
@@ -33,14 +33,15 @@
                     <div class="user-name"><h1>{{profile.first_name}} {{profile_lastname}}</h1></div>
                     {% endif %}
                     <div class="user-description">
-                        {% if profile.email is not None %}
-                        <p>{{profile.email}}</p>
-                        {% endif %}
-                        {% if profile.address is not None %}
-                        <p>{{profile.address}}</p>
-                        {% endif %}
                         {% if profile.bio is not None %}
-                        <p>{{profile.bio}}</p>
+                        {{ profile.bio|linebreaks }}
+                        {% endif %}
+                        {% if profile.user.profile == user %}
+                        <div class="login-wrapper" style="width: auto; height: auto; background-color: #eee; box-shadow: none; border: none; cursor: default;">
+                            <form action="{% url 'edit-profile' profile.id %}">
+                                <input type="submit" value="Edit profile" style="cursor: pointer; background-color: white; font-weight: bold;">
+                            </form>
+                        </div>
                         {% endif %}
                     </div>
                 </div>

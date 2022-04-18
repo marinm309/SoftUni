@@ -1,3 +1,4 @@
+from turtle import pos
 from django.shortcuts import redirect, render
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
@@ -46,7 +47,7 @@ def profile(request, pk):
     user = request.user.profile
     profile = Profile.objects.get(username=pk)
     posts = Post.objects.filter(user=profile)
-    total_posts = len(posts)
+    total_posts = Post.num_of_posts('', profile)
     followers = UserFollowers.objects.filter(user=profile)
     total_followers = len(followers)
     following = UserFollowers.objects.filter(follower=profile.user)
@@ -62,15 +63,30 @@ def profile(request, pk):
 def edit_profile(request, pk):
     user = request.user.profile
     profile = Profile.objects.get(id=pk)
+    if profile.id != user.user.profile.id:
+        return redirect(f'/profile/{user.user}')
+    profile_img_now = profile.profile_pic
     form = ProfileForm(instance=profile)
     if request.method == 'POST':
-        form = ProfileForm(request.POST, instance=profile)
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid:
             form.save()
             return redirect(f'/profile/{user.user}/')
 
-    context = {'form': form, 'user': user}
+    context = {'form': form, 'user': user, 'profile_img_now': profile_img_now}
     return render(request, 'users/edit_profile.html', context)
+
+@login_required(login_url='login')
+def delete_profile(request, pk):
+    user = request.user.profile
+    profile = Profile.objects.get(id=pk)
+    if profile.id != user.user.profile.id:
+        return redirect(f'/profile/{user.user}')
+    elif request.method == 'POST':
+        profile.delete()
+        return redirect('register')
+    context = {'profile': profile, 'user': user}
+    return render(request, 'users/delete_profile.html', context)
 
 @login_required(login_url='login')
 def user_logout(request):

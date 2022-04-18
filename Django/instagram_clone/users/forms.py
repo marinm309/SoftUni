@@ -6,7 +6,8 @@ from django.contrib.auth.models import User
 class ProfileForm(ModelForm):
     class Meta:
         model = Profile
-        fields = ['first_name', 'last_name', 'email', 'bio', 'address', 'phone_number']
+        fields = ['profile_pic', 'first_name', 'last_name', 'email', 'bio', 'address', 'phone_number']
+        
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta:

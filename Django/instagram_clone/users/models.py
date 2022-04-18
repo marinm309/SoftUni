@@ -19,6 +19,15 @@ class Profile(models.Model):
     total_following = models.IntegerField(default=0, null=True)
     total_posts = models.IntegerField(default=0, null=True)
 
+
+    def num_of_followers(self):
+        followers = UserFollowers.objects.filter(user=self.user.profile)
+        return len(followers)
+    
+    def num_of_followings(self):
+        followings = UserFollowers.objects.filter(follower=self.user)
+        return len(followings)
+
     def __str__(self) -> str:
         return str(self.user)
 

@@ -39,6 +39,9 @@ nav form{
 .nav-profile{
     width: 30px;
     border-radius: 50%;
+    height: 30px;
+    overflow: cover;
+    object-fit: cover;
 }
 
 .nav-search{
@@ -235,6 +238,8 @@ nav form{
     grid-area: image;
     display: grid;
     width: 200px;
+    overflow: hidden;
+    object-fit: cover;
 }
 
 .user-img-large img{
@@ -242,6 +247,7 @@ nav form{
     width: 200px;
     height: 200px;
     overflow: hidden;
+    object-fit: cover;
 }
 
 .profile-follow{
@@ -553,4 +559,8 @@ nav form{
     box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.3);
     display: flex;
     justify-content: center;
+}
+
+.edit-profile form input[type=text]{
+    margin-top: 5px;
 }

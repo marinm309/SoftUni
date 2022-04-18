@@ -6,7 +6,7 @@
 
 <div class="follow-wrapper">
     <h1 style="text-align: center;">{{profile.user.profile}}'s followers</h1>
-    {% if total_followers != 0 %}
+    {% if follower.follower.profile.num_of_followers != 0 %}
     {% for follower in followers %}
     <div class="single-follow-wrapper">
         <a href="{% url 'profile' follower.follower.profile.username %}"><img src="{{follower.follower.profile.profile_pic.url}}" alt=""></a>
@@ -16,12 +16,11 @@
         {% elif follower.follower.profile.username not in following_lst and follower.follower != user.user %}
         <h4><a id="unfollow-btn" href="{% url 'follow' follower.follower.profile.id %}">Follow</a></h4>
         {% endif %}
-        <p><span>{{follower.follower.profile.total_posts}}</span> posts</p>
-        <p><a href="{% url 'followers' follower.follower.profile %}"><span>{{follower.follower.profile.total_followers}}</span> followers</a></p>
-        <p><a href="{% url 'following' follower.follower.profile %}"><span>{{follower.follower.profile.total_following}}</span> following</a></p>
+        <p><a href="{% url 'followers' follower.follower.profile %}"><span>{{follower.follower.profile.num_of_followers}}</span> followers</a></p>
+        <p><a href="{% url 'following' follower.follower.profile %}"><span>{{follower.follower.profile.num_of_followings}}</span> following</a></p>
     </div>
     {% endfor %}
-    {% elif total_followers == 0 %}
+    {% elif follower.follower.profile.num_of_followers == 0 %}
     <h1 style="text-align: center; margin-top: 150px;">No followers yet</h1>
     {% endif %}
 </div>

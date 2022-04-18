@@ -28,7 +28,7 @@
         <div class="post-bottom">
             <div class="post-like">
                 <div class="like-btn"><a href="{% url 'like-post' post.id %}"><i class="fa fa-heart" style="font-size:30px;color:red"></i></a></div>
-                <div class="like-num"><h5>{{post.like}} Likes</h5></div>
+                <div class="like-num"><h5>{{post.num_of_likes}} Like{{post.num_of_likes|pluralize:"s"}}</h5></div>
             </div>
             <div class="post-description"><span><h5>{{post.user}}</h5></span><p>{{post.description}}</p></div>
             <div class="post-comments">
@@ -67,7 +67,7 @@
         <div class="post-bottom">
             <div class="post-like">
                 <div class="like-btn"><a href="{% url 'like-post' post.id %}"><i class="fa fa-heart" style="font-size:30px;color:red"></i></a></div>
-                <div class="like-num"><h5>{{post.like}} Like{{post.like|pluralize:"s"}}</h5></div>
+                <div class="like-num"><h5>{{post.num_of_likes}} Like{{post.num_of_likes|pluralize:"s"}}</h5></div>
             </div>
             <div class="post-description"><span><h5>{{post.user}}</h5></span><p>{{post.description}}</p></div>
             <div class="post-comments">

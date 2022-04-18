@@ -27,7 +27,7 @@
         <div class="post-bottom">
             <div class="post-like">
                 <div class="like-btn"><a href="{% url 'like-post' post.id %}"><i class="fa fa-heart" style="font-size:30px;color:red"></i></a></div>
-                <div class="like-num"><h5>{{post.like}} Like{{post.like|pluralize:"s"}}</h5></div>
+                <div class="like-num"><h5>{{post.num_of_likes}} Like{{post.num_of_likes|pluralize:"s"}}</h5></div>
             </div>
             <div class="post-description"><span><h5>{{post.user}}</h5></span><p>{{post.description}}</p></div>
             <div class="post-comments">
@@ -55,7 +55,7 @@
             <div class="single-post-comment">
                 <h5>{{comment.description}}</h5>
                 <a href="{% url 'like-comment' comment.id %}"><i class="fa fa-heart" style="font-size:15px;color:red"></i></a>
-                <h5>{{comment.likes}} Likes</h5>
+                <h5>{{comment.num_of_likes}} Like{{comment.num_of_likes|pluralize:"s"}}</h5>
                 {% if comment.user == user.user.profile %}
                 <h5><a href="{% url 'delete-comment' comment.post.id comment.id %}" style="color: red;">Delete</a></h5>
                 {% endif %}

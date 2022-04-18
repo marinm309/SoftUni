@@ -16,12 +16,11 @@
         {% elif following.user not in following_lst and following.user != user.user.profile %}
         <h4><a id="unfollow-btn" href="{% url 'follow' following.user.user.profile.id %}">Follow</a></h4>
         {% endif %}
-        <p><span>{{following.user.user.profile.total_posts}}</span> posts</p>
-        <p><a href="{% url 'followers' following.user.user.profile.username %}"><span>{{following.user.user.profile.total_followers}}</span> followers</a></p>
-        <p><a href="{% url 'following' following.user.user.profile.username %}"><span>{{following.user.user.profile.total_following}}</span> following</a></p>
+        <p><a href="{% url 'followers' following.user.user.profile.username %}"><span>{{following.user.user.profile.num_of_followers}}</span> followers</a></p>
+        <p><a href="{% url 'following' following.user.user.profile.username %}"><span>{{following.user.user.profile.num_of_followings}}</span> following</a></p>
     </div>
     {% endfor %}
-    {% elif total_following == 0 %}
+    {% elif following.user.user.profile.num_of_followings == 0 %}
     <h1 style="text-align: center; margin-top: 150px;">Not following anyone</h1>
     {% endif %}
 </div>
