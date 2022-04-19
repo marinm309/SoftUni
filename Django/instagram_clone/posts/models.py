@@ -34,7 +34,7 @@ class Post(models.Model):
         return len(comments)
 
     def __str__(self) -> str:
-        return str(self.id)
+        return str(self.title)
 
 
 class Comments(models.Model):

@@ -94,7 +94,7 @@ def user_logout(request):
     return redirect('login')
 
 @login_required(login_url='login')
-def search_results(request):
+def search_results_profiles(request):
     user = request.user.profile
     profile = Profile.objects.get(id=user.id)
     user_followers = UserFollowers.objects.filter(follower=profile.user)
@@ -116,13 +116,12 @@ def search_results(request):
             if len(profiles) != 0:
                 match = True
     else:
-        print(key_word)
         profiles = Profile.objects.filter(username__contains=key_word)
         if len(profiles) != 0:
             match = True
 
-    context = {'profiles': profiles, 'user': user, 'match': match, 'followers': user_followers, 'lst': lst}
-    return render(request, 'users/search_result.html', context)
+    context = {'profiles': profiles, 'user': user, 'match': match, 'followers': user_followers, 'lst': lst, 'key': key_word}
+    return render(request, 'users/search_result_profiles.html', context)
 
 
 @login_required(login_url='login')

@@ -14,6 +14,9 @@
             {% elif post.user not in lst and post.user.user != user.user %}
             <div class="user-follow"><a href="{% url 'follow' post.user.id %}">Follow</a></div>
             {% endif %}
+            {% if post.user.user == user.user %}
+            <div class="user-name"><h5><a style="color: red;" href="{% url 'delete-post' post.id %}">Remove post</a></h5></div>
+            {% endif %}
         </div>
         {% if post.post_type == 'photo' %}
         <div class="post-img"><img src="{{post.file_upload.url}}" alt=""></div>
