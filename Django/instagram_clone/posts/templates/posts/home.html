@@ -6,6 +6,7 @@
 
 {% for post in posts %}
 {% if post.user in lst or post.user == user %}
+
 <div class="post-wrapper">
         <div class="post-top">
             <div class="user-img home"><a href="{% url 'profile' post.user %}"><img src="{{post.user.user.profile.profile_pic.url}}" alt=""></a></div>
@@ -27,22 +28,20 @@
         {% endif %}
         <div class="post-bottom">
             <div class="post-like">
-                <div class="like-btn"><a href="{% url 'like-post' post.id %}"><i class="fa fa-heart" style="font-size:30px;color:red"></i></a></div>
-                <div class="like-num"><h5>{{post.num_of_likes}} Like{{post.num_of_likes|pluralize:"s"}}</h5></div>
+                <div class="like-btn"><a class="like" href="{% url 'like-post' post.id %}"><i class="fa fa-heart" style="font-size:30px;color:red"></i></a></div>
+                <div class="like-num"><h5><span class="ajax-likes" id="{{post.id}}">{{post.num_of_likes}}</span> Like{{post.num_of_likes|pluralize:"s"}}</h5></div>
             </div>
             <div class="post-description"><span><h5>{{post.user}}</h5></span><p>{{post.description}}</p></div>
             <div class="post-comments">
-                {% if post.num_of_comments > 1 %}
-                <div class="view-comments"><p><a href="{% url 'single-post' post.id %}">{{post.num_of_comments|pluralize:"View all"}} {{post.num_of_comments}} comment{{post.num_of_comments|pluralize:"s"}}</a></p></div>
-                {% elif post.num_of_comments == 1 %}
-                <div class="view-comments"><p><a href="{% url 'single-post' post.id %}">View 1 comment</a></p></div>
-                {% endif %}
+
+                <div class="view-comments"><p><a href="{% url 'single-post' post.id %}">View all <span class="{{post.id}}">{{post.num_of_comments}}</span> comment{{post.num_of_comments|pluralize:"s"}}</a></p></div>
+                
                 <div class="time-ago"><h6>{{post.get_date}}</h6></div>
                 <div class="add-comments">
                     <form action="{% url 'create-comment' post.id %}" method="POST">
                         {% csrf_token %}
                         <input class="type-comments" type="text" placeholder="Add a comment..." name="comment">
-                        <input class="post-comments" value="Post" type="submit">
+                        <input class="post-comments comment-btn" value="Post" type="submit" data-href="{% url 'create-comment' post.id %}">
                     </form>
                 </div>
             </div>
@@ -66,18 +65,20 @@
         <div class="post-img"><img src="{{post.file_upload.url}}" alt=""></div>
         <div class="post-bottom">
             <div class="post-like">
-                <div class="like-btn"><a href="{% url 'like-post' post.id %}"><i class="fa fa-heart" style="font-size:30px;color:red"></i></a></div>
-                <div class="like-num"><h5>{{post.num_of_likes}} Like{{post.num_of_likes|pluralize:"s"}}</h5></div>
+                <div class="like-btn"><a class="like" href="{% url 'like-post' post.id %}"><i class="fa fa-heart" style="font-size:30px;color:red"></i></a></div>
+                <div class="like-num"><h5><span class="ajax-likes" id="{{post.id}}">{{post.num_of_likes}}</span> Like{{post.num_of_likes|pluralize:"s"}}</h5></div>
             </div>
             <div class="post-description"><span><h5>{{post.user}}</h5></span><p>{{post.description}}</p></div>
             <div class="post-comments">
-                <div class="view-comments"><p><a href="{% url 'single-post' post.id %}">View all {{post.num_of_comments}} comment{{post.num_of_comments|pluralize:"s"}}</a></p></div>
+
+                <div class="view-comments"><p><a href="{% url 'single-post' post.id %}">View all <span class="{{post.id}}">{{post.num_of_comments}}</span> comment{{post.num_of_comments|pluralize:"s"}}</a></p></div>
+                
                 <div class="time-ago"><h6>{{post.get_date}}</h6></div>
                 <div class="add-comments">
                     <form action="{% url 'create-comment' post.id %}" method="POST">
                         {% csrf_token %}
                         <input class="type-comments" type="text" placeholder="Add a comment..." name="comment">
-                        <input class="post-comments" value="Post" type="submit">
+                        <input class="post-comments comment-btn" value="Post" type="submit" data-href="{% url 'create-comment' post.id %}">
                     </form>
                 </div>
             </div>
@@ -85,5 +86,6 @@
 </div>
 {% endif %}
 {% endfor %}
+
 
 {% endblock content %}

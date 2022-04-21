@@ -4,6 +4,8 @@ from.models import Post, Likes, Comments, CommentLikes
 from django.contrib.auth.decorators import login_required
 from users.models import Profile, UserFollowers
 import os
+from django.http import JsonResponse
+from django.urls import reverse
 
 @login_required(login_url='login')
 def home(request):
@@ -70,6 +72,7 @@ def edit_post(request, pk):
     context = {'form': form}
     return render(request, 'posts/create_post.html', context)
 
+
 @login_required(login_url='login')
 def like_post(request, pk):
     user = request.user.profile
@@ -79,22 +82,31 @@ def like_post(request, pk):
         like = Likes.objects.create(user=user, post_liked=post)
         post.user_liked = like
         post.save()
+        testing = int(post.num_of_likes())
+        indf = '#' + str(post.id)
+        return JsonResponse({'likes': testing, 'indf': indf})
     else:
         like = Likes.objects.get(user=user, post_liked=post)
         like.delete()
+        testing = int(post.num_of_likes())
+        indf = '#' + str(post.id)
+        return JsonResponse({'likes': testing, 'indf': indf})
         
 
     return redirect(request.META['HTTP_REFERER'])
 
 @login_required(login_url='login')
 def create_comment(request, pk):
+    print(pk)
     user = request.user.profile
     post = Post.objects.get(id=pk)
-    description = request.POST['comment']
+    description = request.POST['comment_text']
     comment = Comments.objects.create(user=user, post=post, description=description)
     comment.save()
-    post.num_of_comments += 1
     post.save()
+    total_comments = int(post.num_of_comments())
+    indf_comment = '.' + str(post.id)
+    return JsonResponse({'indf_comment': indf_comment, 'comments': total_comments})
 
     return redirect(request.META['HTTP_REFERER'])
 
@@ -102,7 +114,6 @@ def create_comment(request, pk):
 def delete_comment(request, pk, ck):
     user = request.user.profile
     post = Post.objects.get(id=pk)
-    post.num_of_comments -= 1
     post.save()
     comment = Comments.objects.get(id=ck)
     comment.delete()
@@ -141,3 +152,5 @@ def single_post(request,pk):
 
     context = {'comments': comments, 'user': user, 'post': post, 'lst': lst, 'empty': empty}
     return render(request, 'posts/single_post.html', context)
+
+
