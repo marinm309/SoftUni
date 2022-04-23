@@ -29,7 +29,11 @@
         {% endif %}
         <div class="post-bottom">
             <div class="post-like">
-                <div class="like-btn"><a class="like" href="{% url 'like-post' post.id %}"><i class="fa fa-heart" style="font-size:30px;color:red"></i></a></div>
+                {% if user.user != post.user_liked.user.user %}
+                <div class="like-btn"><a class="like" href="{% url 'like-post' post.id %}"><span class="black-hearth">&#9825;</span></a></div>
+                {% else %}
+                <div class="like-btn"><a class="like" href="{% url 'like-post' post.id %}"><span class="red-hearth">&#9829;</span></a></div>
+                {% endif %}
                 <div class="like-num"><h5><span class="ajax-likes" id="{{post.id}}">{{post.num_of_likes}}</span> Like{{post.num_of_likes|pluralize:"s"}}</h5></div>
             </div>
             <div class="post-description"><span><h5>{{post.user}}</h5></span><p>{{post.description}}</p></div>
@@ -38,8 +42,8 @@
                 <div class="add-comments">
                     <form action="{% url 'create-comment' post.id %}" method="POST">
                         {% csrf_token %}
-                        <input class="type-comments" type="text" placeholder="Add a comment..." name="comment">
-                        <input class="post-comments" value="Post" type="submit">
+                        <input class="type-comments" id="z{{post.id}}" type="text" placeholder="Add a comment..." name="comment">
+                        <input class="post-comments single-comment-btn" value="Post" type="submit" data-href="{% url 'create-comment' post.id %}" data-id="z{{post.id}}">
                     </form>
                 </div>
             </div>
@@ -47,8 +51,10 @@
     </div>
 
     {% if not empty %}
-    <div class="comments-wrapper">
+    <div class="comments-wrapper" id="single_comment_recall">
+        <ul class="single-post-list">
         {% for comment in comments %}
+        <li>
         <div class="comment-wrapper">
             <div class="post-top single-top">
                 <div class="user-img"><a href="{% url 'profile' comment.user %}"><img src="{{comment.user.user.profile.profile_pic.url}}" alt=""></a></div>
@@ -57,14 +63,16 @@
             </div>
             <div class="single-post-comment">
                 <h5>{{comment.description}}</h5>
-                <a href="{% url 'like-comment' comment.id %}"><i class="fa fa-heart" style="font-size:15px;color:red"></i></a>
+                <a href="{% url 'like-comment' comment.id %}"><span class="hearth">&#9825;</span></a>
                 <h5>{{comment.num_of_likes}} Like{{comment.num_of_likes|pluralize:"s"}}</h5>
                 {% if comment.user == user.user.profile %}
                 <h5><a href="{% url 'delete-comment' comment.post.id comment.id %}" style="color: red;">Delete</a></h5>
                 {% endif %}
             </div>
         </div>
+        </li>
         {% endfor %}
+        </ul>
     </div>
     {% else %}
     <div class="comments-wrapper">

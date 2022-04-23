@@ -97,16 +97,18 @@ def like_post(request, pk):
 
 @login_required(login_url='login')
 def create_comment(request, pk):
-    print(pk)
     user = request.user.profile
     post = Post.objects.get(id=pk)
     description = request.POST['comment_text']
+    print(description)
     comment = Comments.objects.create(user=user, post=post, description=description)
     comment.save()
     post.save()
     total_comments = int(post.num_of_comments())
     indf_comment = '.' + str(post.id)
-    return JsonResponse({'indf_comment': indf_comment, 'comments': total_comments})
+    single_comment_id = '#' + str(comment.id)
+    print(single_comment_id)
+    return JsonResponse({'indf_comment': indf_comment, 'comments': total_comments, 'single_comment_id': single_comment_id})
 
     return redirect(request.META['HTTP_REFERER'])
 

@@ -564,3 +564,15 @@ nav form{
 .edit-profile form input[type=text]{
     margin-top: 5px;
 }
+
+.black-hearth{
+    content: "\2665";
+    font-size: 62px;
+    color: black;
+}
+
+.red-hearth{
+    content: "\2665";
+    font-size: 62px;
+    color: red;
+}

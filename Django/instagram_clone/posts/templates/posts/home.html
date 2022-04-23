@@ -28,7 +28,7 @@
         {% endif %}
         <div class="post-bottom">
             <div class="post-like">
-                <div class="like-btn"><a class="like" href="{% url 'like-post' post.id %}"><i class="fa fa-heart" style="font-size:30px;color:red"></i></a></div>
+                <div class="like-btn"><a class="like" href="{% url 'like-post' post.id %}"><span class="hearth">&#9829;</span></a></div>
                 <div class="like-num"><h5><span class="ajax-likes" id="{{post.id}}">{{post.num_of_likes}}</span> Like{{post.num_of_likes|pluralize:"s"}}</h5></div>
             </div>
             <div class="post-description"><span><h5>{{post.user}}</h5></span><p>{{post.description}}</p></div>
@@ -40,8 +40,8 @@
                 <div class="add-comments">
                     <form action="{% url 'create-comment' post.id %}" method="POST">
                         {% csrf_token %}
-                        <input class="type-comments" type="text" placeholder="Add a comment..." name="comment">
-                        <input class="post-comments comment-btn" value="Post" type="submit" data-href="{% url 'create-comment' post.id %}">
+                        <input class="type-comments" id="o{{post.id}}" type="text" placeholder="Add a comment..." name="comment">
+                        <input class="post-comments comment-btn" value="Post" type="submit" data-href="{% url 'create-comment' post.id %}" data-id="o{{post.id}}">
                     </form>
                 </div>
             </div>
@@ -65,7 +65,7 @@
         <div class="post-img"><img src="{{post.file_upload.url}}" alt=""></div>
         <div class="post-bottom">
             <div class="post-like">
-                <div class="like-btn"><a class="like" href="{% url 'like-post' post.id %}"><i class="fa fa-heart" style="font-size:30px;color:red"></i></a></div>
+                <div class="like-btn"><a class="like" href="{% url 'like-post' post.id %}"><span class="hearth">&#9829;</span></a></div>
                 <div class="like-num"><h5><span class="ajax-likes" id="{{post.id}}">{{post.num_of_likes}}</span> Like{{post.num_of_likes|pluralize:"s"}}</h5></div>
             </div>
             <div class="post-description"><span><h5>{{post.user}}</h5></span><p>{{post.description}}</p></div>
@@ -77,8 +77,8 @@
                 <div class="add-comments">
                     <form action="{% url 'create-comment' post.id %}" method="POST">
                         {% csrf_token %}
-                        <input class="type-comments" type="text" placeholder="Add a comment..." name="comment">
-                        <input class="post-comments comment-btn" value="Post" type="submit" data-href="{% url 'create-comment' post.id %}">
+                        <input class="type-comments" id="o{{post.id}}" type="text" placeholder="Add a comment..." name="comment">
+                        <input class="post-comments comment-btn" value="Post" type="submit" data-href="{% url 'create-comment' post.id %}" data-id="o{{post.id}}">
                     </form>
                 </div>
             </div>
