@@ -70,9 +70,11 @@
                 {% endif %}
                 <h5><span id="{{comment.id}}">{{comment.num_of_likes}}</span> Like{{comment.num_of_likes|pluralize:"s"}}</h5>
                 {% if comment.user == user.user.profile %}
+                <h5><a href="">Reply</a></h5>
                 <h5><a class="delete-single-comment" href="{% url 'delete-comment' comment.post.id comment.id %}" style="color: red;">Delete</a></h5>
                 {% endif %}
             </div>
+            <h6 style="margin: 0; text-align: center; width: 50%;"><a href="">View replies()</a></h6>
         </div>
         </li>
         {% endfor %}
