@@ -10,9 +10,9 @@
             <div class="user-img-large">
                 <img src="{{profile.profile_pic.url}}" alt="">
                 {% if profile.user.profile in lst %}
-                <div class="profile-follow"><a style="color: rgb(245, 56, 56);" href="{% url 'unfollow' profile.id %}">Unfollow</a></div>
+                <div style="justify-content: center; display: flex;" class="user-follow"><a class="user-follow-btn" href="{% url 'follow' profile.id %}" style="color: rgb(245, 56, 56);"><span class="unfollow-color" id="{{profile.id}}">Unfollow</span></a></div>
                 {% elif profile.user not in lst and profile.user.profile != user %}
-                <div class="profile-follow"><a href="{% url 'follow' profile.id %}">Follow</a></div>
+                <div style="justify-content: center; display: flex;" class="user-follow"><a class="user-follow-btn" href="{% url 'follow' profile.id %}"><span class="follow-color" id="{{profile.id}}">Follow</span></a></div>
                 {% elif profile.user.profile == user %}
                 <div class="profile-follow"><a href="{% url 'logout' %}" style="color: rgb(245, 56, 56);">Logout</a></div>
                 {% endif %}
@@ -22,8 +22,8 @@
                 <div class="stats-info">
                     <ul>
                         <li><span>{{total_posts}}</span> post{{profile.user.num_of_posts|pluralize:"s"}}</li>
-                        <li><a href="{% url 'followers' profile.user.profile %}"><span>{{profile.user.profile.num_of_followers}}</span> follower{{profile.user.profile.num_of_followers|pluralize:"s"}}</a></li>
-                        <li><a href="{% url 'following' profile.user.profile %}"><span>{{profile.user.profile.num_of_followings}}</span> following{{profile.user.profile.num_of_followings|pluralize:"s"}}</a></li>
+                        <li><a href="{% url 'followers' profile.user.profile %}"><span id="{{profile.id}}123">{{profile.user.profile.num_of_followers}}</span> follower{{profile.user.profile.num_of_followers|pluralize:"s"}}</a></li>
+                        <li><a href="{% url 'following' profile.user.profile %}"><span id="{{profile.id}}321">{{profile.user.profile.num_of_followings}}</span> following{{profile.user.profile.num_of_followings|pluralize:"s"}}</a></li>
                     </ul>
                 </div>
                 <div class="user-info">
@@ -38,8 +38,8 @@
                         {% endif %}
                         {% if profile.user.profile == user %}
                         <div class="login-wrapper" style="width: auto; height: auto; background-color: #eee; box-shadow: none; border: none; cursor: default;">
-                            <form action="{% url 'edit-profile' profile.id %}">
-                                <input type="submit" value="Edit profile" style="cursor: pointer; background-color: white; font-weight: bold;">
+                            <form class="edit-profile-form" action="{% url 'edit-profile' profile.id %}">
+                                <input class="edit-profile-btn" type="submit" value="Edit profile" style="cursor: pointer; background-color: white; font-weight: bold; width: 100%;">
                             </form>
                         </div>
                         {% endif %}

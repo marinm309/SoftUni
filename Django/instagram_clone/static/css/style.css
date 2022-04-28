@@ -3,6 +3,7 @@ body{
     background-color: #eee;
     font-family: 'Roboto', sans-serif;
     color: black;
+    width: auto;
 }
 
 li{
@@ -216,7 +217,11 @@ nav form{
 
 @media only screen and (max-width: 700px){
     .post-wrapper{
-        width: 90%;
+        width: 100%;
+        margin-top: 100px;
+    }
+    .user-name{
+        margin-left: 10%;
     }
 }
 
@@ -225,6 +230,7 @@ nav form{
     height: auto;
     display: flex;
     justify-content: center;
+    margin-top: 100px;
 }
 
 .user-details{
@@ -240,6 +246,7 @@ nav form{
     width: 200px;
     overflow: hidden;
     object-fit: cover;
+    margin-right: 50px;
 }
 
 .user-img-large img{
@@ -296,6 +303,18 @@ nav form{
     margin: 1% 0;
 }
 
+@media only screen and (max-width: 900px){
+    .single-post{
+        flex: 0 0 49%;
+    }
+}
+
+@media only screen and (max-width: 600px){
+    .single-post{
+        flex: 0 0 100%;
+    }
+}
+
 .single-post img{
     width: 100%;
     height: 100%;
@@ -306,6 +325,13 @@ nav form{
     width: 100%;
     padding-left: 20%;
     padding-right: 20%;
+}
+
+@media only screen and (max-width: 600px){
+    .profile-wrapper-editor{
+        padding-left: 0;
+        padding-right: 0;
+    }
 }
 
 .login-png{
@@ -493,6 +519,7 @@ nav form{
 @media only screen and (max-width: 1000px){
     .single-post-wrapper{
         width: 95%;
+        margin-top: 100px;
     }
 }
 
@@ -537,7 +564,8 @@ nav form{
 
 @media only screen and (max-width: 1300px){
     .follow-wrapper{
-        width: 90%;
+        width: 100%;
+        margin-top: 100px;
     }
 }
 
@@ -578,3 +606,32 @@ nav form{
     fill:#ed4956;
 }
 
+.follow-color{
+    color: rgb(80, 80, 241);
+}
+
+.unfollow-color{
+    color: rgb(245, 56, 56);
+}
+
+.single-comment-delete-lst{
+    padding: 0;
+}
+
+.single-comment-delete-lst li{
+    font-size: 15px;
+}
+
+@media only screen and (max-width: 900px){
+    .del-profile{
+        margin-top: 100px;
+    }
+
+    .edit-profile-btn input[type=submit]{
+        width: 200%;
+    }
+
+    .edit-profile-form{
+        width: 100%;
+    }
+}

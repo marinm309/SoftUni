@@ -12,12 +12,12 @@
         <a href="{% url 'profile' follower.follower.profile.username %}"><img src="{{follower.follower.profile.profile_pic.url}}" alt=""></a>
         <h5><a href="{% url 'profile' follower.follower.profile.username %}">{{follower.follower}}</a></h5>
         {% if follower.follower.profile.username in following_lst %}
-        <h4><a id="unfollow-btn" href="{% url 'unfollow' follower.follower.profile.id %}" style="color: rgb(245, 56, 56);">Unfollow</a></h4>
+        <div class="user-follow"><a class="user-follow-btn" href="{% url 'follow' follower.follower.profile.id %}" style="color: rgb(245, 56, 56);"><span id="{{follower.follower.profile.id}}" class="unfollow-color">Unfollow</span></a></div>
         {% elif follower.follower.profile.username not in following_lst and follower.follower != user.user %}
-        <h4><a id="unfollow-btn" href="{% url 'follow' follower.follower.profile.id %}">Follow</a></h4>
+        <div class="user-follow"><a class="user-follow-btn" href="{% url 'follow' follower.follower.profile.id %}"><span id="{{follower.follower.profile.id}}" class="follow-color">Follow</span></a></div>
         {% endif %}
-        <p><a href="{% url 'followers' follower.follower.profile %}"><span>{{follower.follower.profile.num_of_followers}}</span> followers</a></p>
-        <p><a href="{% url 'following' follower.follower.profile %}"><span>{{follower.follower.profile.num_of_followings}}</span> following</a></p>
+        <p><a href="{% url 'followers' follower.follower.profile %}"><span id="{{follower.follower.profile.id}}456">{{follower.follower.profile.num_of_followers}}</span></span> followers</a></p>
+        <p><a href="{% url 'following' follower.follower.profile %}"><span id="{{follower.follower.profile.id}}654">{{follower.follower.profile.num_of_followings}}</span> following</a></p>
     </div>
     {% endfor %}
     {% elif follower.follower.profile.num_of_followers == 0 %}

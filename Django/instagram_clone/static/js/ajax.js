@@ -9,7 +9,6 @@ $('.like').click(function(e){
         success: function(request){
             $(request.indf).text(request.likes)
             $("#" + request.basic_indf + '6969').load(location.href + ' ' + "#" + request.basic_indf + '6969');
-            
         }
     });
 });
@@ -82,3 +81,21 @@ $('.delete-single-comment').click(function(l){
     });
 });
 
+$('.user-follow-btn').click(function(u){
+    u.preventDefault()
+    var follow_user = $(this)
+    var follow_userURL = follow_user.attr('href')
+
+    $.ajax({
+        url: follow_userURL,
+        method: '',
+        data: {},
+        success: function(request){
+            $('#' + request.basic_indf + '123').text(request.profile_followers)
+            $('#' + request.basic_indf + '321').text(request.profile_followings)
+            $('#' + request.basic_indf + '456').text(request.profile_followers)
+            $('#' + request.basic_indf + '654').text(request.profile_followings)
+            $('#' + request.basic_indf).load(location.href + ' ' + '#' + request.basic_indf);
+        }
+    });
+});

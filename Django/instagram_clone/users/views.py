@@ -1,4 +1,5 @@
 from turtle import pos
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
@@ -136,21 +137,13 @@ def follow(request, pk):
     possible = UserFollowers.objects.filter(user=to_follow, follower=profile.user)
     if len(possible) == 0:
         UserFollowers.objects.create(user=to_follow, follower=profile.user)
-    return redirect(request.META['HTTP_REFERER'])
-
-@login_required(login_url='login')
-def unfollow(request, pk):
-    user = request.user.profile
-    to_unfollow = Profile.objects.get(id=pk)
-    profile = Profile.objects.get(id=user.id)
-    to_unfollow.total_followers -= 1
-    to_unfollow.save()
-    profile.total_following -= 1
-    profile.save()
-    possible = UserFollowers.objects.filter(user=to_unfollow, follower=profile.user)
-    if len(possible) != 0:
-        form = UserFollowers.objects.get(user=to_unfollow, follower=profile.user)
+    else:
+        form = UserFollowers.objects.get(user=to_follow, follower=profile.user)
         form.delete()
+    basic_indf = str(to_follow.id)
+    profile_followers = str(to_follow.num_of_followers())
+    profile_followings = str(to_follow.num_of_followings())
+    return JsonResponse({'basic_indf': basic_indf, 'profile_followers': profile_followers, 'profile_followings': profile_followings})
     return redirect(request.META['HTTP_REFERER'])
 
 
