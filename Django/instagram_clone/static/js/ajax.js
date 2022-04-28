@@ -8,6 +8,8 @@ $('.like').click(function(e){
         data: {},
         success: function(request){
             $(request.indf).text(request.likes)
+            $("#" + request.basic_indf + '6969').load(location.href + ' ' + "#" + request.basic_indf + '6969');
+            
         }
     });
 });
@@ -43,9 +45,40 @@ $('.single-comment-btn').click(function(z){
         method: 'POST',
         data: {csrfmiddlewaretoken: csrf, comment_text: $('#' + single_elements).val()},
         success: function(request){
-            console.log(single_elements)
-            location.reload();
             $('.type-comments').val('')
+            location.reload()
         }
     });
 });
+
+$('.single-post-comment-like-btn').click(function(m){
+    m.preventDefault()
+    var single_like = $(this)
+    var single_likeURL = single_like.attr('href')
+
+    $.ajax({
+        url: single_likeURL,
+        method: '',
+        data: {},
+        success: function(request){
+            $(request.indf).text(request.likes)
+            $("#" + request.basic_indf + '1234').load(location.href + ' ' + "#" + request.basic_indf + '1234');
+        }
+    });
+});
+
+$('.delete-single-comment').click(function(l){
+    l.preventDefault()
+    var single_delete_comment = $(this)
+    var single_delete_commentURL = single_delete_comment.attr('href')
+
+    $.ajax({
+        url: single_delete_commentURL,
+        method: '',
+        data: {},
+        success: function(request){
+            $(request.basic_indf).remove();
+        }
+    });
+});
+

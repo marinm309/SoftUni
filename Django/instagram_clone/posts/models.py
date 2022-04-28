@@ -33,6 +33,15 @@ class Post(models.Model):
         comments = Comments.objects.filter(post=self)
         return len(comments)
 
+    def liked_by_user(self, request):
+        user = request.user.profile
+        liked = Likes.objects.filter(post_liked=self, user=user)
+        return len(liked)
+
+    def liked_by_user_home(self):
+        liked = Likes.objects.filter(post_liked=self)
+        return liked
+
     def __str__(self) -> str:
         return str(self.title)
 
@@ -46,6 +55,9 @@ class Comments(models.Model):
     likes = models.IntegerField(default=0, null=True)
     user_liked = models.ForeignKey('CommentLikes', on_delete=models.SET_NULL, null=True)
 
+    def num_of_likes(self):
+        liked = CommentLikes.objects.filter(comment=self)
+        return len(liked)
 
     def get_date(self):
         return humanize.naturaltime(self.created)

@@ -565,14 +565,16 @@ nav form{
     margin-top: 5px;
 }
 
+._8-yf5{
+    height: 24px;
+    width: 24px;
+}
+
 .black-hearth{
-    content: "\2665";
-    font-size: 62px;
-    color: black;
+    fill:#8e8e8e;
 }
 
 .red-hearth{
-    content: "\2665";
-    font-size: 62px;
-    color: red;
+    fill:#ed4956;
 }
+

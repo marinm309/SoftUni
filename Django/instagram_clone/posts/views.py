@@ -18,12 +18,17 @@ def home(request):
     posts = Post.objects.order_by('-created')
     comments = Comments.objects.all()
     dic = {}
+    user_liked = Likes.objects.filter(user=user)
+    test_lst = []
+    for i in user_liked:
+        test_lst.append(i.post_liked.id)
+    print(test_lst)
     for comment in comments:
         if comment.post not in dic:
             dic[comment.post] = [comment.description]
         else:
             dic[comment.post].append(comment.description)
-    context = {'posts': posts, 'comments': comments, 'following': following, 'lst': lst, 'user': user, 'dic': dic}
+    context = {'posts': posts, 'comments': comments, 'following': following, 'lst': lst, 'user': user, 'dic': dic, 'test_lst': test_lst}
     return render(request, 'posts/home.html', context)
 
 
@@ -72,7 +77,6 @@ def edit_post(request, pk):
     context = {'form': form}
     return render(request, 'posts/create_post.html', context)
 
-
 @login_required(login_url='login')
 def like_post(request, pk):
     user = request.user.profile
@@ -84,13 +88,15 @@ def like_post(request, pk):
         post.save()
         testing = int(post.num_of_likes())
         indf = '#' + str(post.id)
-        return JsonResponse({'likes': testing, 'indf': indf})
+        basic_indf = str(post.id)
+        return JsonResponse({'likes': testing, 'indf': indf, 'basic_indf': basic_indf})
     else:
         like = Likes.objects.get(user=user, post_liked=post)
         like.delete()
         testing = int(post.num_of_likes())
         indf = '#' + str(post.id)
-        return JsonResponse({'likes': testing, 'indf': indf})
+        basic_indf = str(post.id)
+        return JsonResponse({'likes': testing, 'indf': indf, 'basic_indf': basic_indf})
         
 
     return redirect(request.META['HTTP_REFERER'])
@@ -106,9 +112,9 @@ def create_comment(request, pk):
     post.save()
     total_comments = int(post.num_of_comments())
     indf_comment = '.' + str(post.id)
-    single_comment_id = '#' + str(comment.id)
-    print(single_comment_id)
-    return JsonResponse({'indf_comment': indf_comment, 'comments': total_comments, 'single_comment_id': single_comment_id})
+    single_comment_id = str(comment.id) + '789'
+    basic_indf = '#' + str(comment.id) + '789'
+    return JsonResponse({'indf_comment': indf_comment, 'comments': total_comments, 'single_comment_id': single_comment_id, 'basic_indf': basic_indf})
 
     return redirect(request.META['HTTP_REFERER'])
 
@@ -118,7 +124,9 @@ def delete_comment(request, pk, ck):
     post = Post.objects.get(id=pk)
     post.save()
     comment = Comments.objects.get(id=ck)
+    basic_indf = '#' + str(comment.id) + '789'
     comment.delete()
+    return JsonResponse({'basic_indf': basic_indf})
 
     return redirect(request.META['HTTP_REFERER'])
 
@@ -131,11 +139,20 @@ def like_comment(request, pk):
         like = CommentLikes.objects.create(user=user, comment=comment)
         comment.likes += 1
         comment.save()
+        testing = int(comment.num_of_likes())
+        indf = '#' + str(comment.id)
+        basic_indf = str(comment.id)
+        return JsonResponse({'likes': testing, 'indf': indf, 'basic_indf': basic_indf})
     else:
         like = CommentLikes.objects.get(user=user, comment=comment)
         like.delete()
         comment.likes -= 1
         comment.save()
+        testing = int(comment.num_of_likes())
+        indf = '#' + str(comment.id)
+        basic_indf = str(comment.id)
+        return JsonResponse({'likes': testing, 'indf': indf, 'basic_indf': basic_indf})
+
     return redirect(request.META['HTTP_REFERER'])
 
 @login_required(login_url='login')
@@ -144,6 +161,13 @@ def single_post(request,pk):
     post = Post.objects.get(id=pk)
     comments = Comments.objects.filter(post=post)
     user_followers = UserFollowers.objects.filter(follower=user.user)
+    liked = post.liked_by_user(request)
+    
+    comment_liked = CommentLikes.objects.filter(user=user)
+    test_lst = []
+    for i in comment_liked:
+        test_lst.append(i.comment.id)
+    
     lst = []
     for i in user_followers:
         lst.append(i.user)
@@ -152,7 +176,7 @@ def single_post(request,pk):
     else:
         empty = False
 
-    context = {'comments': comments, 'user': user, 'post': post, 'lst': lst, 'empty': empty}
+    context = {'comments': comments, 'user': user, 'post': post, 'lst': lst, 'empty': empty, 'liked': liked, 'test_lst': test_lst}
     return render(request, 'posts/single_post.html', context)
 
 
