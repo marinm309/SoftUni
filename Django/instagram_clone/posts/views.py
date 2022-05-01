@@ -196,4 +196,13 @@ def single_post(request,pk):
     context = {'comments': comments, 'user': user, 'post': post, 'lst': lst, 'empty': empty, 'liked': liked, 'test_lst': test_lst}
     return render(request, 'posts/single_post.html', context)
 
+def show_replies(request, pk):
+    comment = Comments.objects.get(id=pk)
+    indf = comment.id
+    return JsonResponse({'indf': indf})
 
+def delete_replies(request, pk):
+    reply = CommentTheComment.objects.get(id=pk)
+    indf = '#' +  str(reply.id)
+    reply.delete()
+    return JsonResponse({'indf': indf})

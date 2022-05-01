@@ -70,23 +70,27 @@
                 <a class="single-post-comment-like-btn" href="{% url 'like-comment' comment.id %}"><svg id="{{comment.id}}1234" class="red-hearth _8-yf5 " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z"/></svg></a>
                 {% endif %}
                 <h5><span id="{{comment.id}}">{{comment.num_of_likes}}</span> Like{{comment.num_of_likes|pluralize:"s"}}</h5>
-                {% if comment.user == user.user.profile %}
                 <h5><a class="reply-btn" href="{% url 'start-reply' comment.user.id comment.id %}">Reply</a></h5>
+                {% if comment.user == user.user.profile %}
                 <h5><a class="delete-single-comment" href="{% url 'delete-comment' comment.post.id comment.id %}" style="color: red;">Delete</a></h5>
                 {% endif %}
             </div>
             {% if comment.num_of_replies > 0 %}
-            <h6 style="margin: 0; text-align: center; width: 50%;"><a href="">View replies({{comment.num_of_replies}})</a></h6>
+            <h6 style="margin: 0; text-align: center; width: 50%;"><a class="view-replies-btn" href="{% url 'show-replies' comment.id %}">View replies({{comment.num_of_replies}})</a></h6>
+            <ul style="display: none;" id="{{comment.id}}007">
             {% for reply in comment.all_replies %}
-                <div style="margin-left: 30px; margin-top: 5px; display: none;" class="post-top single-top">
+            <li id="{{reply.id}}">
+                <div id="{{comment.id}}007" style="margin-left: 30px; margin-top: 5px; padding: 0;" class="post-top single-top single-top-test">
                     <div class="user-img"><a href="{% url 'profile' comment.user %}"><img src="{{reply.user.profile_pic.url}}" alt=""></a></div>
-                    <div class="user-name"><h5><a href="{% url 'profile' comment.user %}">{{reply.user}}</a></h5></div>
+                    <div style="height: 20px;" class="user-name"><h5 style="margin: 0;"><a href="{% url 'profile' comment.user %}">{{reply.user}}</a></h5></div>
                     <div style="margin-left: 20px;" class="user-name"><h5>{{reply.description}}</h5></div>
                     {% if reply.user == user.user.profile %}
-                    <h5><a class="delete-single-comment" href="#######" style="color: red; margin-left: 5px;">Delete</a></h5>
+                    <h5><a class="delete-reply-btn" href="{% url 'delete-reply' reply.id %}" style="color: red; margin-left: 5px;">Delete</a></h5>
                     {% endif %}
                 </div>
+            </li>
             {% endfor %}
+            </ul>
             {% endif %}
         </div>
         </li>

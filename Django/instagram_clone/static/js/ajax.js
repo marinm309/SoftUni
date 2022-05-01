@@ -116,3 +116,41 @@ $('.reply-btn').click(function(j){
         }
     });
 });
+
+$('.view-replies-btn').click(function(p){
+    p.preventDefault()
+    var current_comment = $(this)
+    var current_commentURL = current_comment.attr('href')
+
+    $.ajax({
+        url: current_commentURL,
+        method: '',
+        data: {},
+        success: function(request){
+            reply = document.getElementById(request.indf + '007')
+            if (reply.style.display == 'block'){
+                reply.style.display = "none";
+            } else {
+                reply.style.display = "block";
+            }
+            
+        }
+    });
+});
+
+$('.delete-reply-btn').click(function(w){
+    w.preventDefault()
+    var delete_reply = $(this)
+    var delete_replyURL = delete_reply.attr('href')
+    console.log(delete_replyURL)
+
+    $.ajax({
+        url: delete_replyURL,
+        method: '',
+        data: {},
+        success: function(request){
+            $(request.indf).remove();
+            $('.view-replies-btn').load(' .view-replies-btn')
+        }
+    });
+});

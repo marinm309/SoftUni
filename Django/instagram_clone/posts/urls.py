@@ -12,4 +12,6 @@ urlpatterns = [
     path('single_post/<str:pk>/', views.single_post, name='single-post'),
     path('like_comment/<str:pk>/', views.like_comment, name='like-comment'),
     path('start_reply/<str:pk>/<str:ck>/', views.start_reply, name='start-reply'),
+    path('show_replies/<str:pk>/', views.show_replies, name='show-replies'),
+    path('delete_reply/<str:pk>/', views.delete_replies, name='delete-reply'),
 ]
