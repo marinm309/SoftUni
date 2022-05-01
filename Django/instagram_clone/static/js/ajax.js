@@ -37,12 +37,13 @@ $('.single-comment-btn').click(function(z){
     var single_commentURL = single_comment.attr('data-href')
     var csrf = $('input[name=csrfmiddlewaretoken]').val()
     var single_elements = single_comment.attr('data-id');
+    var comment_the_comment = $('#hidden-comment-id').text()
 
 
     $.ajax({
         url: single_commentURL,
         method: 'POST',
-        data: {csrfmiddlewaretoken: csrf, comment_text: $('#' + single_elements).val()},
+        data: {csrfmiddlewaretoken: csrf, comment_text: $('#' + single_elements).val(), reply_comment: comment_the_comment},
         success: function(request){
             $('.type-comments').val('')
             location.reload()
@@ -96,6 +97,22 @@ $('.user-follow-btn').click(function(u){
             $('#' + request.basic_indf + '456').text(request.profile_followers)
             $('#' + request.basic_indf + '654').text(request.profile_followings)
             $('#' + request.basic_indf).load(location.href + ' ' + '#' + request.basic_indf);
+        }
+    });
+});
+
+$('.reply-btn').click(function(j){
+    j.preventDefault()
+    var reply_user = $(this)
+    var reply_userURL = reply_user.attr('href')
+
+    $.ajax({
+        url: reply_userURL,
+        method: '',
+        data: {},
+        success: function(request){
+            $('.type-comments').val(request.reply_key_word + ' ')
+            $('#hidden-comment-id').text(request.comment)
         }
     });
 });

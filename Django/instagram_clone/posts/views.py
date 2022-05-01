@@ -1,11 +1,12 @@
 from django.shortcuts import redirect, render
 from .forms import PostForm, CommentForm
-from.models import Post, Likes, Comments, CommentLikes
+from.models import CommentTheComment, Post, Likes, Comments, CommentLikes
 from django.contrib.auth.decorators import login_required
 from users.models import Profile, UserFollowers
 import os
 from django.http import JsonResponse
 from django.urls import reverse
+import re
 
 @login_required(login_url='login')
 def home(request):
@@ -106,10 +107,18 @@ def create_comment(request, pk):
     user = request.user.profile
     post = Post.objects.get(id=pk)
     description = request.POST['comment_text']
-    print(description)
-    comment = Comments.objects.create(user=user, post=post, description=description)
-    comment.save()
-    post.save()
+    to_comment = request.POST['reply_comment']
+    if description[0] == '@' and len(to_comment) > 0:
+        pattern = r"(?<=@)[^ ]+"
+        reply_to = re.search(pattern, description)
+        reply_to = reply_to.group(0)
+        comment = Comments.objects.get(id=to_comment)
+        comment_the_comment = CommentTheComment.objects.create(user=user, description=description, comment=comment)
+        comment_the_comment.save()
+    else:
+        comment = Comments.objects.create(user=user, post=post, description=description)
+        comment.save()
+        post.save()
     total_comments = int(post.num_of_comments())
     indf_comment = '.' + str(post.id)
     single_comment_id = str(comment.id) + '789'
@@ -117,6 +126,14 @@ def create_comment(request, pk):
     return JsonResponse({'indf_comment': indf_comment, 'comments': total_comments, 'single_comment_id': single_comment_id, 'basic_indf': basic_indf})
 
     return redirect(request.META['HTTP_REFERER'])
+
+@login_required(login_url='login')
+def start_reply(request, pk, ck):
+    user = request.user.profile
+    comment = Comments.objects.get(id=ck)
+    reply_to = Profile.objects.get(id=pk)
+    reply_key_word = '@' + str(reply_to.username)
+    return JsonResponse({'reply_key_word': reply_key_word, 'comment': comment.id})
 
 @login_required(login_url='login')
 def delete_comment(request, pk, ck):

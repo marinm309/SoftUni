@@ -54,6 +54,7 @@ class Comments(models.Model):
     description = models.TextField(null=True)
     likes = models.IntegerField(default=0, null=True)
     user_liked = models.ForeignKey('CommentLikes', on_delete=models.SET_NULL, null=True)
+    replies = models.ForeignKey('CommentTheComment', on_delete=models.SET_NULL, null=True)
 
     def num_of_likes(self):
         liked = CommentLikes.objects.filter(comment=self)
@@ -66,8 +67,26 @@ class Comments(models.Model):
         likes = CommentLikes.objects.filter(comment=self)
         return len(likes)
 
+    def num_of_replies(self):
+        replies = CommentTheComment.objects.filter(comment=self)
+        return len(replies)
+
+    def all_replies(self):
+        replies_lst = CommentTheComment.objects.filter(comment=self)
+        return replies_lst
+
     def __str__(self) -> str:
         return str(self.description)
+
+class CommentTheComment(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True)
+    comment = models.ForeignKey(Comments, on_delete=models.CASCADE, null=True)
+    description = models.TextField(null=True)
+
+    def __str__(self) -> str:
+        return str(self.comment.description)
 
 class Likes(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True, editable=False)
