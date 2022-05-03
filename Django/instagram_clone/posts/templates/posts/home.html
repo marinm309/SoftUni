@@ -26,7 +26,7 @@
         <div class="post-img"><img src="{{post.file_upload.url}}" alt=""></div>
         {% elif post.post_type == 'video' %}
         <div class="post-img">
-            <video controls muted width="400">
+            <video autoplay muted width="400">
                 <source src="{{post.file_upload.url}}" type="video/mp4">
             </video>
         </div>

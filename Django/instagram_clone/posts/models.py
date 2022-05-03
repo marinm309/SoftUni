@@ -61,7 +61,9 @@ class Comments(models.Model):
         return len(liked)
 
     def get_date(self):
-        return humanize.naturaltime(self.created)
+        time = humanize.naturaltime(self.created)
+        time_lst = time.split(', ')
+        return time_lst[0]
 
     def num_of_likes(self):
         likes = CommentLikes.objects.filter(comment=self)
