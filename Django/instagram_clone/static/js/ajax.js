@@ -154,3 +154,8 @@ $('.delete-reply-btn').click(function(w){
         }
     });
 });
+
+$('#myvid').click(function(){
+    var video = $(this)
+    video.muted = !video.muted;
+})
