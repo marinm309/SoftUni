@@ -159,3 +159,18 @@ $('#myvid').click(function(){
     var video = $(this)
     video.muted = !video.muted;
 })
+
+$('.friend-btn').click(function(h){
+    h.preventDefault()
+    var friend = $(this)
+    var friendURL = friend.attr('href')
+
+    $.ajax({
+        url: friendURL,
+        method: '',
+        data: {},
+        success: function(request){
+            $('.right-inbox').load(' .right-inbox')
+        }
+    })
+})

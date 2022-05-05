@@ -29,9 +29,10 @@
                 </div>
             </form>
             <ul class="main-nav">
-                <li><a href="{% url 'home' %}"><i class='fa fa-home'></i></a></li>
-                <li><a href="{% url 'create-post' %}"><i class="fa fa-plus-square"></i></a></li>
-                <li><a href="{% url 'profile' user.username %}"><img src="{{user.user.profile.profile_pic.url}}" alt="" class="nav-profile"></a></li>
+                <li style="height: 24px;"><a style="font-size: 26px;" href="{% url 'home' %}"><i class='fa fa-home'></i></a></li>
+                <li style="height: 24px;"><a style="font-size: 26px;" href="{% url 'create-post' %}"><i class="fa fa-plus-square"></i></a></li>
+                <li style="height: 24px;"><a style="font-size: 0px;" href="{% url 'inbox' %}"><svg aria-label="Direct" class="_8-yf5 " color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><line fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2" x1="22" x2="9.218" y1="3" y2="10.083"></line><polygon fill="none" points="11.698 20.334 22 3.001 2 3.001 9.218 10.084 11.698 20.334" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></polygon></svg></a></li>
+                <li style="height: 24px;"><a style="font-size: 0px;" href="{% url 'profile' user.username %}"><img src="{{user.user.profile.profile_pic.url}}" alt="" class="nav-profile"></a></li>
             </ul>
         </div>
     </nav>

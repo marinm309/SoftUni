@@ -636,3 +636,55 @@ nav form{
     }
 }
 
+.inbox-wrapper{
+    width: 1200px;
+    height: 75vh;
+    border: 1px solid rgb(170, 170, 170);
+    -webkit-box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.3); 
+    box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.3);
+    margin: 0 auto;
+    display: flex;
+    background-color: white;
+}
+
+.left-inbox{
+    width: 40%;
+    overflow: auto;
+}
+
+.friend-img{
+    overflow: hidden;
+    object-fit: cover;
+}
+
+.friend{
+    padding-left: 25px;
+    display: flex;
+    align-items: center;
+    height: 80px;
+}
+
+.friend:hover{
+    background-color: rgb(242, 242, 250);
+}
+
+.friend-name-activity{
+    height: 40px;
+    align-items: center;
+}
+
+.friend-name-activity p{
+    margin: 0px 10px;
+}
+
+.friend-img img{
+    overflow: hidden;
+    object-fit: cover;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.right-inbox{
+    width: 60%;
+}
