@@ -5,12 +5,12 @@
 
 <div class="inbox-wrapper">
     <div class="left-inbox">
-        {% for friend in friends %}
-        <a class="friend-btn" id="{{friend.follower.profile.id}}" href="{% url 'active-chat' friend.follower.profile.id %}">
+        {% for chat in chats %}
+        <a class="friend-btn" id="{{chat.other_user.username}}" href="{% url 'active-chat' chat.other_user.id %}">
             <div class="friend">
-                <div class="friend-img"><img src="{{friend.follower.profile.profile_pic.url}}" alt=""></div>
+                <div class="friend-img"><img src="{{chat.other_user.profile_pic.url}}" alt=""></div>
                 <div class="friend-name-activity">
-                    <p>{{friend.follower.profile.username}}</p>
+                    <p>{{chat.other_user.username}}</p>
                     <p style="color: rgb(156, 153, 153);">A week ago</p>
                 </div>
             </div>
@@ -19,20 +19,30 @@
     </div>
 
 
-    <div class="right-inbox">
-        {% if active %}
-        <h2>ASDF</h2>
-        {% else %}
+    <div class="right-inbox" style="overflow: auto;" >
         <div class="friend-info">
-            
+            <div class="friend">
+                <div class="friend-img"><img src="{{chat_with.profile_pic.url}}" alt=""></div>
+                <div class="friend-name-activity">
+                    <p>{{other_user}}</p>
+                    <p style="color: rgb(156, 153, 153);">A week ago</p>
+                </div>
+            </div>
         </div>
-        <div class="chat-wrapper">
-
+        <div class="chat-wrapper" style="overflow: auto;">
+            <ul class="test-mess" style="overflow: auto;">
+                
+            </ul>
         </div>
         <div class="chat-input">
-
+            
+            <form class="send-message-form" action="{% url 'send-message' %}" method="POST" data-href="{% url 'send-message' %}">
+                {% csrf_token %}
+                <input class="message-field" type="text" name="message">
+                <input class="send-message-btn" id="" type="submit">
+            </form>
+            
         </div>
-        {% endif %}
     </div>
 
 

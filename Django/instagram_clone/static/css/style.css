@@ -688,3 +688,11 @@ nav form{
 .right-inbox{
     width: 60%;
 }
+
+.left-text{
+    text-align: left;
+}
+
+.right-text{
+    text-align: right;
+}

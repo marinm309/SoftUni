@@ -2,17 +2,56 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from users.models import *
 from posts.models import *
+from . models import *
 from django.http import JsonResponse
+from itertools import chain
+
 
 def inbox(request):
     user = request.user.profile
     friends = UserFollowers.objects.filter(user=user)
-    active = True
-    context = {'friends': friends, 'user': user, 'active': active}
+    active = False
+    chats = Chat.objects.filter(user=user.user)
+    context = {'friends': friends, 'user': user, 'active': active, 'chats': chats}
+    print(request.method)
     return render(request, 'chats/inbox.html', context)
 
 def active_chat(request, pk):
     user = request.user.profile
     chat_with = Profile.objects.get(id=pk)
-    active = False
-    return JsonResponse({'active': active, 'chat_with': chat_with.id})
+    active = True
+    chat = Chat.objects.filter(other_user=chat_with, user=user.user)
+    if len(chat) == 0:
+        Chat.objects.create(other_user=chat_with)
+    chat = Chat.objects.get(other_user=chat_with, user=user.user)
+    MainBubble.objects.order_by('-created')
+    OtherBubble.objects.order_by('-created')
+    main_user_bubbles = MainBubble.objects.filter(in_chat=chat, user=user)
+    other_user_bubbles = OtherBubble.objects.filter(in_chat=chat, other=chat_with)
+    merged = sorted(chain(other_user_bubbles, main_user_bubbles),key=lambda instance: instance.created)
+        
+    merged_messages = [x.text for x in merged]
+    merged_users = []
+    for i in merged:
+        temp = str(i).split(' ')
+        if 'MainBubble' in temp[0]:
+            merged_users.append(user.username)
+        else:
+            merged_users.append(chat_with.username)
+
+    return JsonResponse({'active': active, 'chat': chat.id, 'merged_messages': merged_messages, 'merged_users': merged_users, 'user': user.username, 'chat_with': chat_with.username})
+
+def send_message(request):
+    user = request.user.profile
+    message = request.POST['message']
+    other_user = request.POST['other_user']
+    other_user = other_user[1:]
+    print(other_user)
+    other_user = Profile.objects.get(username=other_user)
+    current_chat = Chat.objects.get(user=user.user, other_user=other_user)
+    other_side_chat = Chat.objects.get(other_user=user, user=other_user.user)
+    print(current_chat.user, current_chat.other_user)
+    MainBubble.objects.create(text=message, user=user, in_chat=current_chat)
+    OtherBubble.objects.create(text=message, other=user, in_chat=other_side_chat)
+
+    return JsonResponse({'koza': 132})

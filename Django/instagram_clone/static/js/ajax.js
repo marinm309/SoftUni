@@ -155,11 +155,6 @@ $('.delete-reply-btn').click(function(w){
     });
 });
 
-$('#myvid').click(function(){
-    var video = $(this)
-    video.muted = !video.muted;
-})
-
 $('.friend-btn').click(function(h){
     h.preventDefault()
     var friend = $(this)
@@ -170,7 +165,36 @@ $('.friend-btn').click(function(h){
         method: '',
         data: {},
         success: function(request){
-            $('.right-inbox').load(' .right-inbox')
+            $('.test-mess').empty()
+            var mLen = request.merged_messages.length
+            for (var i = 0; i < mLen; i++) {
+                if(request.merged_users[i] == request.user){
+                    $('.test-mess').append('<li class="right-text">' + request.merged_messages[i] + '</li>')
+                }
+                else{
+                    $('.test-mess').append('<li class="left-text">' + request.merged_messages[i] + '</li>')
+                }
+              }
         }
-    })
-})
+    });
+});
+
+$('.send-message-btn').click(function(y){
+    y.preventDefault()
+    var send_message = $('.send-message-form')
+    var send_messageURL = send_message.attr('data-href')
+    var csrf = $('input[name=csrfmiddlewaretoken]').val()
+    var message = $('.message-field').val()
+    var other_user = '7kozunakis'
+
+    $.ajax({
+        url: send_messageURL,
+        method: 'POST', 
+        data: {csrfmiddlewaretoken: csrf, other_user: other_user, message: message},
+        success: function(request){
+            $('.message-field').val('')
+            $('.test-mess').append('<li class="right-text">' + message + '</li>')
+        }
+    });
+});
+
