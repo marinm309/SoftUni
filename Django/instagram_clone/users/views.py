@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from posts.models import Post
 from .models import *
 from .forms import CustomUserCreationForm
+from chats.models import *
 
 
 def user_register(request):
@@ -38,6 +39,9 @@ def user_login(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
+            user = Profile.objects.get(user=user)
+            user.is_active = True
+            user.save()
             return redirect('home')
     context = {}
     return render(request, 'users/login.html', context)
@@ -91,6 +95,10 @@ def delete_profile(request, pk):
 
 @login_required(login_url='login')
 def user_logout(request):
+    user = request.user.profile
+    user.update_last_seen()
+    user.is_active = False
+    user.save()
     logout(request)
     return redirect('login')
 
@@ -137,9 +145,18 @@ def follow(request, pk):
     possible = UserFollowers.objects.filter(user=to_follow, follower=profile.user)
     if len(possible) == 0:
         UserFollowers.objects.create(user=to_follow, follower=profile.user)
+        first_chat = Chat.objects.filter(user=user.user, other_user=to_follow)
+        second_chat = Chat.objects.filter(user=to_follow.user, other_user=user)
+        if len(first_chat) == 0 and len(second_chat) == 0:
+            Chat.objects.create(user=user.user, other_user=to_follow)
+            Chat.objects.create(user=to_follow.user, other_user=user)
     else:
         form = UserFollowers.objects.get(user=to_follow, follower=profile.user)
         form.delete()
+        #first_chat = Chat.objects.get(user=user.user, other_user=to_follow)
+        #second_chat = Chat.objects.get(user=to_follow.user, other_user=user)
+        #first_chat.delete()
+        #second_chat.delete()
     basic_indf = str(to_follow.id)
     profile_followers = str(to_follow.num_of_followers())
     profile_followings = str(to_follow.num_of_followings())

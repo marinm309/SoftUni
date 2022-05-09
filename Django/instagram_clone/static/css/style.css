@@ -121,6 +121,7 @@ nav form{
     display: grid;
     width: 30px;
     margin-right: 20px;
+    object-fit: cover;
 }
 
 .home{
@@ -133,6 +134,7 @@ nav form{
     height: 30px;
     overflow: hidden;
     margin-left: 20px;
+    object-fit: cover;
 }
 
 .user-follow a{
@@ -637,12 +639,13 @@ nav form{
 }
 
 .inbox-wrapper{
-    width: 1200px;
+    width: 90%;
     height: 75vh;
     border: 1px solid rgb(170, 170, 170);
     -webkit-box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.3); 
     box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.3);
     margin: 0 auto;
+    margin-top: 100px;
     display: flex;
     background-color: white;
 }
@@ -650,6 +653,11 @@ nav form{
 .left-inbox{
     width: 40%;
     overflow: auto;
+    border-right: 1px solid #8e8e8e;
+}
+
+.friend-info{
+    height: 10vh;
 }
 
 .friend-img{
@@ -687,12 +695,120 @@ nav form{
 
 .right-inbox{
     width: 60%;
+    display: none;
 }
 
-.left-text{
-    text-align: left;
+.chat-form{
+    width: 60%;
+    margin: 25px auto;
+}
+
+@media only screen and (max-width: 600px){
+    .inbox-wrapper{
+        width: 98%;
+    }
+    
+    .left-inbox{
+        width: 50%;
+    }
+
+    .right-inbox{
+        width: 50%;
+    }
+
+    .chat-form{
+        width: 100%;
+    }
+}
+
+.chat-with{
+    border-bottom: 1px solid #8e8e8e;
+    height: 100%;
+}
+
+.chat-with:hover{
+    background-color: white;
+}
+
+.right-bubble-wrapper{
+    width: 100%;
+    display: flex;
+    justify-content: right;
+    margin: 10px 0;
+}
+
+.left-bubble-wrapper{
+    width: 100%;
+    display: flex;
+    justify-content: left;
+    margin: 10px 0;
+    box-sizing: border-box;
+}
+
+.right-bubble{
+    width: auto;
+    background-color: rgb(231, 226, 226);
+    border-radius: 10px;
+    padding: 5px 15px;
+}
+
+.left-bubble{
+    width: auto;
+    border: 2px solid rgb(231, 226, 226);
+    border-radius: 10px;
+    padding: 5px 15px;
 }
 
 .right-text{
     text-align: right;
+    word-wrap: break-word;
+    max-width: 300px;
+    font-size: 18px;
+}
+
+.left-text{
+    text-align: left;
+    word-wrap: break-word;
+    max-width: 300px;
+    font-size: 18px;
+}
+
+@media only screen and (max-width: 800px){
+    .right-text{
+        max-width: 150px;
+    }
+
+    .left-text{
+        max-width: 150px;
+    }
+}
+
+.chat-wrapper{
+    overflow: auto;
+    height: 59vh;
+}
+
+.chat-field{
+    height: 5vh;
+}
+
+.send-message-form{
+    width: 100%;
+    height: 100%;
+    align-items: center;
+}
+
+.message-field{
+    width: 90%;
+}
+
+.send-message-btn{
+    max-width: 20%;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+}
+
+.send-message-form input{
+    padding: 0 10px;
 }

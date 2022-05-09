@@ -165,16 +165,33 @@ $('.friend-btn').click(function(h){
         method: '',
         data: {},
         success: function(request){
+            hide_element = document.getElementById('to_be_hidden')
+            hide_element.style.display = 'none'
+            show_element = document.getElementById('to_be_shown')
+            show_element.style.display = 'block'
+            $('#js-username').text(request.chat_with)
+            document.getElementById("js-img").src = request.other_user_img
+            $('#js-status').text(request.other_user_activity)
             $('.test-mess').empty()
             var mLen = request.merged_messages.length
             for (var i = 0; i < mLen; i++) {
-                if(request.merged_users[i] == request.user){
-                    $('.test-mess').append('<li class="right-text">' + request.merged_messages[i] + '</li>')
+                if(mLen - 1 == i){
+                    if(request.merged_users[i] == request.user){
+                        $('.test-mess').append('<div class="right-bubble-wrapper" id="last">' + '<div class="right-bubble">' + '<li class="right-text">' + request.merged_messages[i] + '</li>' + '</div>' + '</div>') 
+                    }
+                    else{
+                        $('.test-mess').append('<div class="left-bubble-wrapper" id="last">' + '<div class="left-bubble">' + '<li class="left-text">' + request.merged_messages[i] + '</li>' + '</div>' + '</div>')
+                    }
+                }
+                else if(request.merged_users[i] == request.user){
+                    $('.test-mess').append('<div class="right-bubble-wrapper">' + '<div class="right-bubble">' + '<li class="right-text">' + request.merged_messages[i] + '</li>' + '</div>' + '</div>')
                 }
                 else{
-                    $('.test-mess').append('<li class="left-text">' + request.merged_messages[i] + '</li>')
+                    $('.test-mess').append('<div class="left-bubble-wrapper">' + '<div class="left-bubble">' + '<li class="left-text">' + request.merged_messages[i] + '</li>' + '</div>' + '</div>')
                 }
               }
+                var element = document.getElementById("last")
+                element.scrollIntoView()
         }
     });
 });
@@ -185,7 +202,8 @@ $('.send-message-btn').click(function(y){
     var send_messageURL = send_message.attr('data-href')
     var csrf = $('input[name=csrfmiddlewaretoken]').val()
     var message = $('.message-field').val()
-    var other_user = '7kozunakis'
+    var other_user = $('#js-username').text()
+    console.log(other_user)
 
     $.ajax({
         url: send_messageURL,
@@ -193,7 +211,9 @@ $('.send-message-btn').click(function(y){
         data: {csrfmiddlewaretoken: csrf, other_user: other_user, message: message},
         success: function(request){
             $('.message-field').val('')
-            $('.test-mess').append('<li class="right-text">' + message + '</li>')
+            $('.test-mess').append('<div class="right-bubble-wrapper" id="last">' + '<div class="right-bubble">' + '<li class="right-text">' + message + '</li>' + '</div>' + '</div>')
+            var element = document.getElementById("last")
+            element.scrollIntoView()
         }
     });
 });

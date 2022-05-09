@@ -21,6 +21,8 @@ def active_chat(request, pk):
     chat_with = Profile.objects.get(id=pk)
     active = True
     chat = Chat.objects.filter(other_user=chat_with, user=user.user)
+    other_user_img = '/images/' + str(chat_with.profile_pic)
+    other_user_activity = chat_with.get_last_seen()
     if len(chat) == 0:
         Chat.objects.create(other_user=chat_with)
     chat = Chat.objects.get(other_user=chat_with, user=user.user)
@@ -39,14 +41,12 @@ def active_chat(request, pk):
         else:
             merged_users.append(chat_with.username)
 
-    return JsonResponse({'active': active, 'chat': chat.id, 'merged_messages': merged_messages, 'merged_users': merged_users, 'user': user.username, 'chat_with': chat_with.username})
+    return JsonResponse({'other_user_activity':other_user_activity, 'other_user_img': other_user_img, 'active': active, 'chat': chat.id, 'merged_messages': merged_messages, 'merged_users': merged_users, 'user': user.username, 'chat_with': chat_with.username})
 
 def send_message(request):
     user = request.user.profile
     message = request.POST['message']
     other_user = request.POST['other_user']
-    other_user = other_user[1:]
-    print(other_user)
     other_user = Profile.objects.get(username=other_user)
     current_chat = Chat.objects.get(user=user.user, other_user=other_user)
     other_side_chat = Chat.objects.get(other_user=user, user=other_user.user)

@@ -1,6 +1,8 @@
 from django.db import models
 import uuid
 from django.contrib.auth.models import User
+from datetime import datetime, timedelta
+from django.contrib.humanize.templatetags import humanize
 
 class Profile(models.Model):
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
@@ -18,6 +20,8 @@ class Profile(models.Model):
     total_followers = models.IntegerField(default=0, null=True)
     total_following = models.IntegerField(default=0, null=True)
     total_posts = models.IntegerField(default=0, null=True)
+    is_active = models.BooleanField(default=False, null=True)
+    last_seen = models.DateTimeField(blank=True, null=True)
 
 
     def num_of_followers(self):
@@ -27,6 +31,17 @@ class Profile(models.Model):
     def num_of_followings(self):
         followings = UserFollowers.objects.filter(follower=self.user)
         return len(followings)
+
+    def update_last_seen(self, *args, **kwargs):
+        if self.is_active:
+            time = datetime.now() - timedelta(hours=3)
+            self.last_seen = time
+        super().save(*args, **kwargs)
+
+    def get_last_seen(self):
+        time = humanize.naturaltime(self.last_seen)
+        time_lst = time.split(', ')
+        return time_lst[0]
 
     def __str__(self) -> str:
         return str(self.user)
