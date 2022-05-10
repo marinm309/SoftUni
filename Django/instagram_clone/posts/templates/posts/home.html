@@ -4,6 +4,27 @@
 
 {% load static %}
 
+<div class="story-wrapper">
+    <ul>
+        <li>
+            <div class="story">
+                <img src="{{user.profile_pic.url}}" alt="">
+            </div>
+            <span class="user">Your story</span>
+        </li>
+        {% for story in stories %}
+        <a class="view-story" href="{% url 'view-story' story.user.username %}">
+            <li class="has-story">
+                <div class="story">
+                    <img src="{{story.user.profile_pic.url}}" alt="">
+                </div>
+                <span class="user">{{story.user.username}}</span>
+            </li>
+        </a>
+        {% endfor %}
+    </ul>
+</div>
+
 {% for post in posts %}
 {% if post.user in lst or post.user == user %}
 

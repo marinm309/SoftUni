@@ -211,10 +211,43 @@ $('.send-message-btn').click(function(y){
         data: {csrfmiddlewaretoken: csrf, other_user: other_user, message: message},
         success: function(request){
             $('.message-field').val('')
-            $('.test-mess').append('<div class="right-bubble-wrapper" id="last">' + '<div class="right-bubble">' + '<li class="right-text">' + message + '</li>' + '</div>' + '</div>')
+            if(message.length > 0){
+                $('.test-mess').append('<div class="right-bubble-wrapper" id="last">' + '<div class="right-bubble">' + '<li class="right-text">' + message + '</li>' + '</div>' + '</div>')
+            }
             var element = document.getElementById("last")
             element.scrollIntoView()
         }
+    });
+});
+
+$('#chat_search_word').click(function(g){
+    g.preventDefault()
+    var key_word_field = document.getElementById('chat_search_word')
+    var chatUrl = $('#chat-form-id').attr('data-href')
+    key_word_field.addEventListener('keyup', (e) => {
+        var chat_search_word = $(this).val()
+        $.ajax({
+            url: chatUrl,
+            method: 'GET',
+            data: {chat_search_word: chat_search_word},
+            success: function(request){
+                console.log(chat_search_word)
+                lstLen = request.all_in_chat.length
+                for (var i = 0; i < lstLen; i++){
+                    var current_username = request.all_in_chat[i]
+                    var current_username_div = document.getElementById(current_username)
+                    console.log(request.matches)
+                    console.log(request.all_in_chat)
+                    console.log(current_username)
+                    if(current_username in request.matches){
+                        current_username_div.style.display = 'block'
+                    }
+                    else{
+                        current_username_div.style.display = 'none'
+                    }
+                }
+            }
+        });
     });
 });
 

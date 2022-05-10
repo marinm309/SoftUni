@@ -47,11 +47,25 @@ def send_message(request):
     user = request.user.profile
     message = request.POST['message']
     other_user = request.POST['other_user']
-    other_user = Profile.objects.get(username=other_user)
-    current_chat = Chat.objects.get(user=user.user, other_user=other_user)
-    other_side_chat = Chat.objects.get(other_user=user, user=other_user.user)
-    print(current_chat.user, current_chat.other_user)
-    MainBubble.objects.create(text=message, user=user, in_chat=current_chat)
-    OtherBubble.objects.create(text=message, other=user, in_chat=other_side_chat)
+    if len(message) > 0:
+        other_user = Profile.objects.get(username=other_user)
+        current_chat = Chat.objects.get(user=user.user, other_user=other_user)
+        other_side_chat = Chat.objects.get(other_user=user, user=other_user.user)
+        print(current_chat.user, current_chat.other_user)
+        MainBubble.objects.create(text=message, user=user, in_chat=current_chat)
+        OtherBubble.objects.create(text=message, other=user, in_chat=other_side_chat)
 
     return JsonResponse({'koza': 132})
+
+def chat_search(request):
+    user = request.user.profile
+    search = request.GET['chat_search_word']
+    chats = Chat.objects.filter(user=user.user)
+    matches = {}
+    all_in_chat = [x.other_user.username for x in chats]
+    for i in chats:
+        if str(search) in str(i.other_user.username):
+            matches[i.other_user.username] = ''
+    print(matches)
+    print(all_in_chat)
+    return JsonResponse({'search': search, 'matches': matches, 'all_in_chat': all_in_chat})

@@ -5,11 +5,11 @@
 
 <div class="inbox-wrapper">
     <div class="left-inbox">
-        <form class="chat-form" action="" method="POST">
+        <form id="chat-form-id" class="chat-form" action="{% url 'chat-search' %}" method="" data-href="{% url 'chat-search' %}">
             {% csrf_token %}
             <div class="nav-search">
                 <i class="fa fa-search"></i>
-                <input type="text" placeholder="Search...">
+                <input type="text" placeholder="Search..." id="chat_search_word">
             </div>
         </form>
         {% for chat in chats %}

@@ -14,4 +14,5 @@ urlpatterns = [
     path('start_reply/<str:pk>/<str:ck>/', views.start_reply, name='start-reply'),
     path('show_replies/<str:pk>/', views.show_replies, name='show-replies'),
     path('delete_reply/<str:pk>/', views.delete_replies, name='delete-reply'),
+    path('story/<str:pk>/', views.view_story, name='view-story'),
 ]

@@ -1,0 +1,13 @@
+{% extends 'main.html' %}
+
+{% load static %}
+
+{% block content %}
+
+{% for story in user_stories %}
+
+<img src="{{story.file_upload.url}}" alt="">
+
+{% endfor %}
+
+{% endblock content %}

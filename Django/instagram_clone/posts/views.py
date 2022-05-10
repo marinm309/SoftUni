@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from .forms import PostForm, CommentForm
-from.models import CommentTheComment, Post, Likes, Comments, CommentLikes
+from.models import CommentTheComment, Post, Likes, Comments, CommentLikes, Story
 from django.contrib.auth.decorators import login_required
 from users.models import Profile, UserFollowers
 import os
@@ -12,6 +12,11 @@ import re
 def home(request):
     user = request.user.profile
     following = UserFollowers.objects.filter(follower=user.user)
+    stories = []
+    for i in following:
+        story = Story.objects.filter(user=i.user)
+        if len(story) > 0:
+            stories.append(i)
     lst = []
     for i in following:
         lst.append(i.user)
@@ -29,7 +34,7 @@ def home(request):
             dic[comment.post] = [comment.description]
         else:
             dic[comment.post].append(comment.description)
-    context = {'posts': posts, 'comments': comments, 'following': following, 'lst': lst, 'user': user, 'dic': dic, 'test_lst': test_lst}
+    context = {'posts': posts, 'comments': comments, 'following': following, 'lst': lst, 'user': user, 'dic': dic, 'test_lst': test_lst, 'stories': stories}
     return render(request, 'posts/home.html', context)
 
 
@@ -206,3 +211,10 @@ def delete_replies(request, pk):
     indf = '#' +  str(reply.id)
     reply.delete()
     return JsonResponse({'indf': indf})
+
+def view_story(request, pk):
+    current_user = request.user.profile
+    user = Profile.objects.get(username=pk)
+    user_stories = Story.objects.filter(user=user)
+    context = {'user': current_user, 'user_stories': user_stories}
+    return render(request, 'posts/story.html', context)
