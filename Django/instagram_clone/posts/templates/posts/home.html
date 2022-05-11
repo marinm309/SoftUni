@@ -15,7 +15,7 @@
             </li>
         </a>
         {% for story in stories %}
-        <a class="view-story" href="{% url 'view-story' story.user.username %}">
+        <a class="view-story" href="{% url 'view-story' story.user.username story.id %}">
             <li class="has-story">
                 <div class="story">
                     <img src="{{story.user.profile_pic.url}}" alt="">

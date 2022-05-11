@@ -115,3 +115,9 @@ class Story(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True)
     story_type = models.CharField(max_length=10, null=True, blank=True)
     file_upload = models.FileField(null=True, upload_to='posts', validators=[FileExtensionValidator(allowed_extensions=['MOV','avi','mp4','webm','mkv','png','jpg'])])
+
+    def time_to_delete(self):
+        time = humanize.naturaltime(self.created)
+        if '1 day' in time:
+            return True
+        return False

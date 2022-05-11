@@ -1,3 +1,4 @@
+from operator import mod
 from django.shortcuts import redirect, render
 from .forms import PostForm, CommentForm
 from.models import CommentTheComment, Post, Likes, Comments, CommentLikes, Story
@@ -7,6 +8,7 @@ import os
 from django.http import JsonResponse
 from django.urls import reverse
 import re
+import threading
 
 @login_required(login_url='login')
 def home(request):
@@ -16,7 +18,13 @@ def home(request):
     for i in following:
         story = Story.objects.filter(user=i.user)
         if len(story) > 0:
-            stories.append(i)
+            for j in story:
+                stories.append(j)
+                break
+    all_stories = Story.objects.all()
+    for i in all_stories:
+        if i.time_to_delete():
+            i.delete()
     lst = []
     for i in following:
         lst.append(i.user)
@@ -212,9 +220,69 @@ def delete_replies(request, pk):
     reply.delete()
     return JsonResponse({'indf': indf})
 
-def view_story(request, pk):
+def view_story(request, pk, ck):
     current_user = request.user.profile
     user = Profile.objects.get(username=pk)
     user_stories = Story.objects.filter(user=user)
-    context = {'user': current_user, 'user_stories': user_stories}
+    user_stories = user_stories.order_by('created')
+    first_show = ''
+    for i in user_stories:
+        first_show = i
+        break
+    modified = []
+    for i in range(len(user_stories)):
+        if i == 0:
+            modified.append('move')
+        else:
+            modified.append(str(i))
+
+
+
+    context = {'user': current_user, 'user_stories': user_stories, 'first_show': first_show, 'modified': modified}
+    return render(request, 'posts/story.html', context)
+
+def story_forward(request, pk, ck):
+    current_user = request.user.profile
+    user = Profile.objects.get(username=pk)
+    stories = Story.objects.filter(user=user)
+    stories = stories.order_by('created')
+    stories = [x.id for x in stories]
+    current_story = Story.objects.get(id=ck)
+    index = stories.index(current_story.id)
+    if len(stories) - 1 > index:
+        next_story_id = stories[index + 1]
+        next = Story.objects.get(id=next_story_id)
+        modified = []
+        for i in range(len(stories)):
+            if i == index + 1:
+                modified.append('move')
+            else:
+                modified.append(str(i))
+    else:
+        return redirect('home')
+    
+    context = {'first_show': next, 'modified': modified, 'user': current_user}
+    return render(request, 'posts/story.html', context)
+
+def story_backward(request, pk, ck):
+    current_user = request.user.profile
+    user = Profile.objects.get(username=pk)
+    stories = Story.objects.filter(user=user)
+    stories = stories.order_by('created')
+    stories = [x.id for x in stories]
+    current_story = Story.objects.get(id=ck)
+    index = stories.index(current_story.id)
+    if len(stories) - 1 >= index > 0:
+        prev_story_id = stories[index - 1]
+        prev = Story.objects.get(id=prev_story_id)
+        modified = []
+        for i in range(len(stories)):
+            if i == index - 1:
+                modified.append('move')
+            else:
+                modified.append(str(i))
+    else:
+        return redirect('home')
+
+    context = {'first_show': prev, 'modified': modified, 'user': current_user}
     return render(request, 'posts/story.html', context)

@@ -4,28 +4,33 @@
 
 {% block content %}
 
-{% for story in user_stories %}
 
 <div class="single-user-stories">
     <div class="progress-container">
-        <div class="progress-bar" style="animation-duration: 5s">
-            
-        </div>
+        {% for story in modified %}
+        <div id="{{story}}" class="progress-bar"></div>
+        {% if story == 'move' %}
+        <style>
+            #move{
+                animation-duration: 8s
+            }
+        </style>
+        {% endif %}
+        {% endfor %}
     </div>
     <div class="story-content">
-        <div class="left-arrow"></div>
-        {% if story.story_type == 'photo' %}
-        <img class="story-img" src="{{story.file_upload.url}}" alt="">
+        <a class="left-arrow-btn" href="{% url 'story-backward' first_show.user.username first_show.id %}"><div class="left-arrow"></div></a>
+        {% if first_show.story_type == 'photo' %}
+        <img class="story-img" src="{{first_show.file_upload.url}}" alt="">
         {% else %}
         <video class="story-vidieo" autoplay muted width="400">
-            <source src="{{story.file_upload.url}}" type="video/mp4">
+            <source src="{{first_show.file_upload.url}}" type="video/mp4">
         </video>
         {% endif %}
-        <div class="right-arrow"></div>
+        <a class="right-arrow-btn" href="{% url 'story-forward' first_show.user.username first_show.id %}"><div class="right-arrow"></div></a>
     </div>
 </div>
 
-{% endfor %}
 
 
 {% endblock content %}
