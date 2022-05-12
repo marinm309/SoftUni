@@ -4,19 +4,23 @@
 
 {% block content %}
 
-
 <div class="single-user-stories">
     <div class="progress-container">
         {% for story in modified %}
-        <div id="{{story}}" class="progress-bar"></div>
-        {% if story == 'move' %}
+        <div id="{{story}}" class="progress-bar" data-time="{{first_show.story_length}}"></div>
         <style>
             #move{
-                animation-duration: 8s
+                animation-duration: 2s;
             }
         </style>
-        {% endif %}
         {% endfor %}
+        <script>
+            var story = document.getElementById('move')
+            var story_time = story.getAttribute('data-time')
+            console.log(story)
+            console.log(story_time)
+            story.style.animationDuration = story_time + 's';
+        </script>
     </div>
     <div class="story-content">
         <a class="left-arrow-btn" href="{% url 'story-backward' first_show.user.username first_show.id %}"><div class="left-arrow"></div></a>
@@ -30,7 +34,5 @@
         <a class="right-arrow-btn" href="{% url 'story-forward' first_show.user.username first_show.id %}"><div class="right-arrow"></div></a>
     </div>
 </div>
-
-
 
 {% endblock content %}

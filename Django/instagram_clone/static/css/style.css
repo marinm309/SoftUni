@@ -1,3 +1,7 @@
+:root {
+    --aDur: 5s;
+  }
+
 body{
     margin: 0;
     background-color: #eee;

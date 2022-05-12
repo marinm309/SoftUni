@@ -108,16 +108,26 @@ class CommentLikes(models.Model):
     def __str__(self) -> str:
         return str(self.comment)
 
+STORY_LENGTH = (
+    (5, ('5')), 
+    (10, ('10')),
+    (15, ('15')),
+    (20, (' 20'))
+)
 
 class Story(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True, editable=False)
     created = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True)
     story_type = models.CharField(max_length=10, null=True, blank=True)
+    story_length = models.IntegerField(choices=STORY_LENGTH, null=True)
     file_upload = models.FileField(null=True, upload_to='posts', validators=[FileExtensionValidator(allowed_extensions=['MOV','avi','mp4','webm','mkv','png','jpg'])])
 
     def time_to_delete(self):
         time = humanize.naturaltime(self.created)
-        if '1 day' in time:
+        if 'day' in str(time):
             return True
         return False
+
+    def __str__(self) -> str:
+        return self.user.username

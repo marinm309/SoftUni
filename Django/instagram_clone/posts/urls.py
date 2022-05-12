@@ -17,4 +17,5 @@ urlpatterns = [
     path('story/<str:pk>/<str:ck>/', views.view_story, name='view-story'),
     path('story_forward/<str:pk>/<str:ck>/', views.story_forward, name='story-forward'),
     path('story_backward/<str:pk>/<str:ck>/', views.story_backward, name='story-backward'),
+    path('create_story/', views.create_story, name='create-story'),
 ]

@@ -1,6 +1,6 @@
 from operator import mod
 from django.shortcuts import redirect, render
-from .forms import PostForm, CommentForm
+from .forms import PostForm, CommentForm, StoryForm
 from.models import CommentTheComment, Post, Likes, Comments, CommentLikes, Story
 from django.contrib.auth.decorators import login_required
 from users.models import Profile, UserFollowers
@@ -8,13 +8,18 @@ import os
 from django.http import JsonResponse
 from django.urls import reverse
 import re
-import threading
 
 @login_required(login_url='login')
 def home(request):
     user = request.user.profile
     following = UserFollowers.objects.filter(follower=user.user)
     stories = []
+    user_stories = Story.objects.filter(user=user)
+    print(user_stories)
+    if len(user_stories) > 0:
+        for i in user_stories:
+            stories.append(i)
+            break
     for i in following:
         story = Story.objects.filter(user=i.user)
         if len(story) > 0:
@@ -36,7 +41,6 @@ def home(request):
     test_lst = []
     for i in user_liked:
         test_lst.append(i.post_liked.id)
-    print(test_lst)
     for comment in comments:
         if comment.post not in dic:
             dic[comment.post] = [comment.description]
@@ -236,8 +240,6 @@ def view_story(request, pk, ck):
         else:
             modified.append(str(i))
 
-
-
     context = {'user': current_user, 'user_stories': user_stories, 'first_show': first_show, 'modified': modified}
     return render(request, 'posts/story.html', context)
 
@@ -286,3 +288,21 @@ def story_backward(request, pk, ck):
 
     context = {'first_show': prev, 'modified': modified, 'user': current_user}
     return render(request, 'posts/story.html', context)
+
+def create_story(request):
+    user = request.user.profile
+    form = StoryForm()
+    if request.method == 'POST':
+        form = StoryForm(request.POST, request.FILES)
+        extesion = os.path.splitext(str(request.FILES['file_upload']))[1]
+        if form.is_valid:
+            story = form.save(commit=False)
+            story.user = user
+            if extesion == '.mp4':
+                story.story_type = 'video'
+            else:
+                story.story_type = 'photo'
+            story.save()
+            return redirect('home')
+    context = {'user': user, 'form': form}
+    return render(request, 'posts/create_story.html', context)
