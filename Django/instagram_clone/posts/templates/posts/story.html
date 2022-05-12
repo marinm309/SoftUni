@@ -17,9 +17,11 @@
         <script>
             var story = document.getElementById('move')
             var story_time = story.getAttribute('data-time')
-            console.log(story)
-            console.log(story_time)
-            story.style.animationDuration = story_time + 's';
+            var story_time_auto = story_time + '000'
+            story.style.animationDuration = story_time + 's'
+            setTimeout(function() {
+            document.querySelector("#story-forward").click();
+            }, parseInt(story_time_auto)); 
         </script>
     </div>
     <div class="story-content">
@@ -31,7 +33,7 @@
             <source src="{{first_show.file_upload.url}}" type="video/mp4">
         </video>
         {% endif %}
-        <a class="right-arrow-btn" href="{% url 'story-forward' first_show.user.username first_show.id %}"><div class="right-arrow"></div></a>
+        <a id="story-forward" class="right-arrow-btn" href="{% url 'story-forward' first_show.user.username first_show.id %}"><div class="right-arrow"></div></a>
     </div>
 </div>
 
