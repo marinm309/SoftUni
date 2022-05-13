@@ -129,6 +129,9 @@ class Story(models.Model):
             return True
         return False
 
+    def time_ago(self):
+        return humanize.naturaltime(self.created)
+
 
 
     def __str__(self) -> str:
