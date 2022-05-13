@@ -5,17 +5,20 @@ from posts.models import *
 from . models import *
 from django.http import JsonResponse
 from itertools import chain
+from django.contrib.auth.decorators import login_required
 
-
+@login_required(login_url='login')
 def inbox(request):
     user = request.user.profile
-    friends = UserFollowers.objects.filter(user=user)
+    friends = UserFollowers.objects.filter(follower=user.user)
+    friends = [x.user.username for x in friends]
     active = False
     chats = Chat.objects.filter(user=user.user)
     context = {'friends': friends, 'user': user, 'active': active, 'chats': chats}
     print(request.method)
     return render(request, 'chats/inbox.html', context)
 
+@login_required(login_url='login')
 def active_chat(request, pk):
     user = request.user.profile
     chat_with = Profile.objects.get(id=pk)
@@ -43,6 +46,7 @@ def active_chat(request, pk):
 
     return JsonResponse({'other_user_activity':other_user_activity, 'other_user_img': other_user_img, 'active': active, 'chat': chat.id, 'merged_messages': merged_messages, 'merged_users': merged_users, 'user': user.username, 'chat_with': chat_with.username})
 
+@login_required(login_url='login')
 def send_message(request):
     user = request.user.profile
     message = request.POST['message']
@@ -57,6 +61,7 @@ def send_message(request):
 
     return JsonResponse({'koza': 132})
 
+@login_required(login_url='login')
 def chat_search(request):
     user = request.user.profile
     search = request.GET['chat_search_word']

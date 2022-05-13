@@ -153,10 +153,6 @@ def follow(request, pk):
     else:
         form = UserFollowers.objects.get(user=to_follow, follower=profile.user)
         form.delete()
-        #first_chat = Chat.objects.get(user=user.user, other_user=to_follow)
-        #second_chat = Chat.objects.get(user=to_follow.user, other_user=user)
-        #first_chat.delete()
-        #second_chat.delete()
     basic_indf = str(to_follow.id)
     profile_followers = str(to_follow.num_of_followers())
     profile_followings = str(to_follow.num_of_followings())

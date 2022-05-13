@@ -13,6 +13,7 @@
             </div>
         </form>
         {% for chat in chats %}
+        {% if chat.other_user.username in friends %}
         <a class="friend-btn" id="{{chat.other_user.username}}" href="{% url 'active-chat' chat.other_user.id %}">
             <div class="friend">
                 <div class="friend-img"><img src="{{chat.other_user.profile_pic.url}}" alt=""></div>
@@ -29,6 +30,7 @@
                 </div>
             </div>
         </a>
+        {% endif %}
         {% endfor %}
     </div>
 

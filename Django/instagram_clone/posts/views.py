@@ -213,17 +213,20 @@ def single_post(request,pk):
     context = {'comments': comments, 'user': user, 'post': post, 'lst': lst, 'empty': empty, 'liked': liked, 'test_lst': test_lst}
     return render(request, 'posts/single_post.html', context)
 
+@login_required(login_url='login')
 def show_replies(request, pk):
     comment = Comments.objects.get(id=pk)
     indf = comment.id
     return JsonResponse({'indf': indf})
 
+@login_required(login_url='login')
 def delete_replies(request, pk):
     reply = CommentTheComment.objects.get(id=pk)
     indf = '#' +  str(reply.id)
     reply.delete()
     return JsonResponse({'indf': indf})
 
+@login_required(login_url='login')
 def view_story(request, pk, ck):
     current_user = request.user.profile
     user = Profile.objects.get(username=pk)
@@ -243,6 +246,7 @@ def view_story(request, pk, ck):
     context = {'user': current_user, 'user_stories': user_stories, 'first_show': first_show, 'modified': modified}
     return render(request, 'posts/story.html', context)
 
+@login_required(login_url='login')
 def story_forward(request, pk, ck):
     current_user = request.user.profile
     user = Profile.objects.get(username=pk)
@@ -266,6 +270,7 @@ def story_forward(request, pk, ck):
     context = {'first_show': next, 'modified': modified, 'user': current_user}
     return render(request, 'posts/story.html', context)
 
+@login_required(login_url='login')
 def story_backward(request, pk, ck):
     current_user = request.user.profile
     user = Profile.objects.get(username=pk)
@@ -289,6 +294,7 @@ def story_backward(request, pk, ck):
     context = {'first_show': prev, 'modified': modified, 'user': current_user}
     return render(request, 'posts/story.html', context)
 
+@login_required(login_url='login')
 def create_story(request):
     user = request.user.profile
     form = StoryForm()
