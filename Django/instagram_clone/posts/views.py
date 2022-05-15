@@ -124,7 +124,8 @@ def create_comment(request, pk):
     user = request.user.profile
     post = Post.objects.get(id=pk)
     description = request.POST['comment_text']
-    to_comment = request.POST['reply_comment']
+    if 'reply_comment' in str(request.POST):
+        to_comment = request.POST['reply_comment']
     if description[0] == '@' and len(to_comment) > 0:
         pattern = r"(?<=@)[^ ]+"
         reply_to = re.search(pattern, description)
