@@ -267,6 +267,7 @@ def story_forward(request, pk, ck):
     else:
         return redirect('home')
     
+    
     context = {'first_show': next, 'modified': modified, 'user': current_user}
     return render(request, 'posts/story.html', context)
 

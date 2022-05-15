@@ -1,8 +1,10 @@
+from pyexpat import model
 from django.db import models
 import uuid
 from users.models import Profile
 from django.contrib.humanize.templatetags import humanize
 from django.core.validators import FileExtensionValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Post(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True, editable=False)
@@ -108,11 +110,14 @@ class CommentLikes(models.Model):
     def __str__(self) -> str:
         return str(self.comment)
 
+
+
 STORY_LENGTH = (
     (5, ('5')), 
     (10, ('10')),
     (15, ('15')),
-    (20, (' 20'))
+    (20, (' 20')),
+    (0, ('custom'))
 )
 
 class Story(models.Model):
@@ -121,6 +126,7 @@ class Story(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True)
     story_type = models.CharField(max_length=10, null=True, blank=True)
     story_length = models.IntegerField(choices=STORY_LENGTH, null=True)
+    story_length_custom = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(5), MaxValueValidator(60)])
     file_upload = models.FileField(null=True, upload_to='posts', validators=[FileExtensionValidator(allowed_extensions=['MOV','avi','mp4','webm','mkv','png','jpg'])])
 
     def time_to_delete(self):

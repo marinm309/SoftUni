@@ -236,9 +236,6 @@ $('#chat_search_word').click(function(g){
                 for (var i = 0; i < lstLen; i++){
                     var current_username = request.all_in_chat[i]
                     var current_username_div = document.getElementById(current_username)
-                    console.log(request.matches)
-                    console.log(request.all_in_chat)
-                    console.log(current_username)
                     if(current_username in request.matches){
                         current_username_div.style.display = 'block'
                     }
@@ -251,4 +248,12 @@ $('#chat_search_word').click(function(g){
     });
 });
 
-
+$('select').click(function(){
+    var selected_time = $(this).val()
+    if(selected_time == '0'){
+        var regular_time_field = document.getElementById('regular_time')
+        regular_time_field.style.display = 'none'
+        var custom_time_field = document.getElementById('custom_time')
+        custom_time_field.style.display = 'block'
+    }
+});

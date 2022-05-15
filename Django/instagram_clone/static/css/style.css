@@ -1052,3 +1052,11 @@ nav form{
     margin: 0;
     padding: 0;
 }
+
+#custom_time{
+    display: none;
+}
+
+#regular_time{
+    display: block;
+}

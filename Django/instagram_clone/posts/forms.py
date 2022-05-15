@@ -21,8 +21,9 @@ class CommentForm(ModelForm):
 class StoryForm(ModelForm):
     class Meta:
         model = Story
-        fields = ['file_upload', 'story_length']
+        fields = ['file_upload', 'story_length', 'story_length_custom']
 
     def __init__(self, *args, **kwargs):
         super(StoryForm, self).__init__(*args, **kwargs)
         self.fields['story_length'].required = True
+

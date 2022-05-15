@@ -9,10 +9,15 @@
         <div class="login-wrapper-special">
             <form action="{% url 'create-story' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                {% for field in form %}
-                {{field.label}}
-                {{field}}
-                {% endfor %}
+                {{form.file_upload.label}}
+                {{form.file_upload}}
+                {{form.story_length.label}}
+                <div id="regular_time" style="display: block;">
+                    {{form.story_length}}
+                </div>
+                <div id="custom_time" style="display: none;">
+                    {{form.story_length_custom}}
+                </div>
                 <input id="login-btn" type="submit" value="Post">
             </form>
         </div>

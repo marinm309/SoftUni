@@ -14,7 +14,11 @@
 <div class="single-user-stories">
     <div class="progress-container">
         {% for story in modified %}
+        {% if first_show.story_length == 0 %}
+        <div id="{{story}}" class="progress-bar" data-time="{{first_show.story_length_custom}}"></div>
+        {% else %}
         <div id="{{story}}" class="progress-bar" data-time="{{first_show.story_length}}"></div>
+        {% endif %}
         <style>
             #move{
                 animation-duration: 2s;
